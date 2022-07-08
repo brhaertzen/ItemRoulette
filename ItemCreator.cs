@@ -6,13 +6,11 @@ using System.Threading.Tasks;
 
 namespace ItemEvaluator
 {
-	class Program
+	public class ItemCreator : Menu
 	{
-		static void Main(string[] args)
+		public override void Enter()
 		{
-			Console.Title = "Item Evaluator";
-			Navigator navigator = new Navigator();
-			navigator.Enter();
+			MenuStateEnterText($"You are now in the Item Creator.");
 		}
 	}
 }
