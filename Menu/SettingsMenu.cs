@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ItemEvaluator
 {
-	public class Settings : Menu
+	class SettingsMenu : Menu
 	{
 		public override void Enter()
 		{

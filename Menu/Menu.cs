@@ -8,17 +8,18 @@ namespace ItemEvaluator
 {
 	public class Menu
 	{
-		protected static string lineBreak = $"========================================";
+		protected static string lineBreak = "========================================";
 		public virtual void Enter()
 		{
 		}
 
 		protected static void MenuStateEnterText(string enterStatement)
-		{
-			Console.WriteLine($"{lineBreak}");
-			Console.WriteLine();
-			Console.WriteLine($"{enterStatement}");
-			Console.WriteLine();
+		{			
+			Console.WriteLine(
+				$"\n" +
+				$"{lineBreak}\n" +
+				$"\n" +
+				$"{enterStatement}\n");
 		}
 	}
 }

@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace ItemEvaluator
 {
-	public class UserCreator : Menu
+	public class ItemCreatorMenu : Menu
 	{
 		public override void Enter()
 		{
-			MenuStateEnterText($"You are now in the User Creator.");
+			MenuStateEnterText($"You are now in the Item Creator.");
 		}
 	}
 }

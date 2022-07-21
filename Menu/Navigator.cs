@@ -3,46 +3,40 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace ItemEvaluator
-{
-	public enum MenuState
-	{
-		Start,
-		UserCreator,
-		ItemCreator,
-		Settings
-	}
-	
+{	
 	public class Navigator : Menu
 	{
+		public User user { get; private set; }
+
 		public override void Enter()
 		{
+			MenuStateEnterText($"Welcome to the Item Evaluator!");
 			NavigateTo(MenuState.Start);
 		}
+
 		public void NavigateTo(MenuState currentMenuState)
 		{
+
 			switch (currentMenuState)
 			{
 				case MenuState.Start: Start(); break;
 				case MenuState.ItemCreator: EnterItemCreator(); break;
 				case MenuState.UserCreator: EnterUserCreator(); break;
-				case MenuState.Settings: EnterSettings(); break;
+				case MenuState.Settings: EnterUserSettings(); break;
 			}			
 		}
 
 		private void Start()
-		{
-			MenuStateEnterText($"Welcome to the Item Evaluator!");
-			Console.WriteLine($"Where would you like to go?");
-			Console.WriteLine($"Type 1 to go into the Item Creator.");
-			Console.WriteLine($"Type 2 to go into the User Creator.");
-			Console.WriteLine($"Type 3 to go into Settings.");
-
-			var input = Console.ReadLine();
-			int intInput;
-			bool isInt = int.TryParse(input, out intInput);
-
+		{			
+			Console.WriteLine(
+				$"Where would you like to go?\n" +
+				$"Type 1 to go into the Item Creator.\n" +
+				$"Type 2 to go into the User Creator.\n" +
+				$"Type 3 to go into User Settings.\n");
+			bool isInt = int.TryParse(Console.ReadLine(), out int intInput);
 			if (!isInt)
 			{
 				Console.WriteLine();
@@ -55,26 +49,26 @@ namespace ItemEvaluator
 				{
 					case 1: EnterItemCreator(); break;
 					case 2: EnterUserCreator(); break;
-					case 3: EnterSettings(); break;
+					case 3: EnterUserSettings(); break;
 				}
 			}			
 		}
 
 		private void EnterItemCreator()
 		{			
-			ItemCreator itemCreator = new ItemCreator();
+			ItemCreatorMenu itemCreator = new ItemCreatorMenu();
 			itemCreator.Enter();
 		}
 
 		private void EnterUserCreator()
 		{			
-			UserCreator userCreator = new UserCreator();
+			UserCreatorMenu userCreator = new UserCreatorMenu();
 			userCreator.Enter();
 		}
 
-		private static void EnterSettings()
+		private void EnterUserSettings()
 		{			
-			Settings settingsMenu = new Settings();
+			SettingsMenu settingsMenu = new SettingsMenu();
 			settingsMenu.Enter();
 		}		
 	}
