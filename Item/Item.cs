@@ -13,9 +13,9 @@ namespace ItemEvaluator
 		public float Weight { get; private set; }
 		public float Height { get; private set; }
 		public List<ItemTags> ItemTags { get; private set; }
-		public List<ColorTag> ColorTags { get; private set; }
+		public List<ConsoleColor> ColorTags { get; private set; }
 
-		public Item(String name, string userWhoCreated, float weight, float height, List<ItemTags> itemTags, List<ColorTag> colorTags)
+		public Item(String name, string userWhoCreated, float weight, float height, List<ItemTags> itemTags, List<ConsoleColor> colorTags)
 		{
 			this.Name = name;
 			this.UserWhoCreated = userWhoCreated;

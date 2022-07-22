@@ -9,9 +9,7 @@ namespace ItemEvaluator
 	public class User
 	{
 		public string Name { get; private set; }
-
 		public UserSettings UserSettings { get; private set; }
-
 		public int ItemsCreated { get; private set; } = 0;
 
 		public User(String name, UserSettings settings)

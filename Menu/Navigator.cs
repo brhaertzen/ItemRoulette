@@ -10,66 +10,84 @@ namespace ItemEvaluator
 	public class Navigator : Menu
 	{
 		public User user { get; private set; }
+		public List<User> userList { get; private set; } = new List<User>();
+		public List<Item> itemList { get; private set; } = new List<Item>();
 
-		public override void Enter()
-		{
-			MenuStateEnterText($"Welcome to the Item Evaluator!");
+		public void EnterNavigator()
+		{			
 			NavigateTo(MenuState.Start);
 		}
 
-		public void NavigateTo(MenuState currentMenuState)
+		public void NavigateTo(MenuState nextMenuState)
 		{
-
-			switch (currentMenuState)
+			switch (nextMenuState)
 			{
 				case MenuState.Start: Start(); break;
+				case MenuState.MainMenu: EnterMainMenu(); break;
 				case MenuState.ItemCreator: EnterItemCreator(); break;
 				case MenuState.UserCreator: EnterUserCreator(); break;
 				case MenuState.Settings: EnterUserSettings(); break;
+				case MenuState.Exit: Exit(); break;
 			}			
 		}
 
+		public void UpdateUserAndList(List<User> userList, User user)
+		{
+			this.userList = userList;
+			this.user = user;
+		}
+
 		private void Start()
-		{			
-			Console.WriteLine(
-				$"Where would you like to go?\n" +
-				$"Type 1 to go into the Item Creator.\n" +
-				$"Type 2 to go into the User Creator.\n" +
-				$"Type 3 to go into User Settings.\n");
-			bool isInt = int.TryParse(Console.ReadLine(), out int intInput);
-			if (!isInt)
+		{
+			MenuStateEnterText($"Welcome to the Item Evaluator Application!");
+			if (userList.Count == 0)
 			{
-				Console.WriteLine();
-				Console.WriteLine($"Invalid Input.");
-				NavigateTo(MenuState.Start);
-			}				
-			else
+				Console.WriteLine($"There are no users created. Please create a User to continue.");
+				NavigateTo(MenuState.UserCreator);
+				return;
+			}
+			Console.WriteLine($"Please select a User by typing their name from the following list:");
+			foreach (var user in userList)
+				Console.WriteLine($"{user.Name}");
+			Console.WriteLine($"Or type {quote}New User{quote} to create a new user.");
+			bool validUserOption = false;
+			while (!validUserOption)
 			{
-				switch (intInput)
-				{
-					case 1: EnterItemCreator(); break;
-					case 2: EnterUserCreator(); break;
-					case 3: EnterUserSettings(); break;
-				}
-			}			
+				string userOption = Console.ReadLine().ToLower();
+			}
+		}
+
+		private void EnterMainMenu()
+		{
+			MainMenu mainMenu = new MainMenu();
+			MenuState nextMenuState = mainMenu.Enter();
+			NavigateTo(nextMenuState);
 		}
 
 		private void EnterItemCreator()
 		{			
 			ItemCreatorMenu itemCreator = new ItemCreatorMenu();
-			itemCreator.Enter();
+			MenuState nextMenuState =  itemCreator.Enter();
+			NavigateTo(nextMenuState);
 		}
 
 		private void EnterUserCreator()
 		{			
-			UserCreatorMenu userCreator = new UserCreatorMenu();
-			userCreator.Enter();
+			UserCreatorMenu userCreator = new UserCreatorMenu(this, userList);
+			MenuState nextMenuState = userCreator.Enter();
+			NavigateTo(nextMenuState);
 		}
 
 		private void EnterUserSettings()
 		{			
 			SettingsMenu settingsMenu = new SettingsMenu();
-			settingsMenu.Enter();
+			MenuState nextMenuState = settingsMenu.Enter();
+			NavigateTo(nextMenuState);
 		}		
+
+		private void Exit()
+		{
+
+		}
 	}
 }

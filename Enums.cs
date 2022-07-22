@@ -9,9 +9,11 @@ namespace ItemEvaluator
 	public enum MenuState
 	{
 		Start,
+		MainMenu,
 		UserCreator,
 		ItemCreator,
-		Settings
+		Settings,
+		Exit
 	}
 
 	public enum TemperatureScale
@@ -30,20 +32,7 @@ namespace ItemEvaluator
 	public enum ItemTags
 	{
 
-	}
-
-	public enum ColorTag
-	{
-		Red,
-		Orange,
-		Yellow,
-		Green,
-		Blue,
-		Purple,
-		Brown,
-		White,
-		Black
-	}
+	}	
 
 	public class Enums
 	{

@@ -8,13 +8,12 @@ namespace ItemEvaluator
 {
 	public static class MeasurementConverter
 	{
+		//Values are saved in database as imperial for all height and weight. Conversion needed to save and retrieve
 		public static float SaveValueHeight(MeasurementSystem measurementSystem, float meterOrFeet, float centimeterOrInch)
 		{
 			float saveValue;
-			if (measurementSystem == MeasurementSystem.Imperial)
-			{
-				saveValue = FeetAndInchToFeet(meterOrFeet, centimeterOrInch);
-			}
+			if (measurementSystem == MeasurementSystem.Imperial)			
+				saveValue = FeetAndInchToFeet(meterOrFeet, centimeterOrInch);			
 			else
 			{
 				saveValue = MeterAndCentimeterToMeter(meterOrFeet, centimeterOrInch);
@@ -26,10 +25,8 @@ namespace ItemEvaluator
 		public static float SaveValueWeight(MeasurementSystem measurementSystem, float kilogramOrPound, float gramOrOunce)
 		{
 			float saveValue;
-			if (measurementSystem == MeasurementSystem.Imperial)
-			{
-				saveValue = PoundAndOunceToPound(kilogramOrPound, gramOrOunce);
-			}
+			if (measurementSystem == MeasurementSystem.Imperial)			
+				saveValue = PoundAndOunceToPound(kilogramOrPound, gramOrOunce);			
 			else
 			{
 				saveValue = KilogramAndGramToKilogram(kilogramOrPound, gramOrOunce);
@@ -38,55 +35,89 @@ namespace ItemEvaluator
 			return saveValue;
 		}
 
-		public static float MeterToFeet(float meter)
+		public static string DisplayValueHeight(MeasurementSystem measurementSystem, float height)
+		{
+			float value;
+			string displayValue;
+			if (measurementSystem == MeasurementSystem.Imperial)
+			{
+				value = height;
+				displayValue = DisplayImperialHeight(value);
+			}
+			else
+			{
+				value = FeetToMeter(height);
+				displayValue = DisplayMetricHeight(value);
+			}
+			return displayValue;
+		}
+
+		public static string DisplayValueWeight(MeasurementSystem measurementSystem, float weight)
+		{
+			float value;
+			string displayValue;
+			if (measurementSystem == MeasurementSystem.Imperial)
+			{
+				value = weight;
+				displayValue = DisplayImperialWeight(value);
+			}
+			else
+			{
+				value = PoundToKilogram(weight);
+				displayValue = DisplayMetricWeight(value);
+			}
+			return displayValue;
+		}
+
+		private static float MeterToFeet(float meter)
 		{
 			float feet = meter * 3.281f;
 			return feet;
 		}
 
-		public static float FeetToMeter(float feet)
+		private static float FeetToMeter(float feet)
 		{
 			float meter = feet / 3.281f;
 			return meter;
 		}
 
-		public static float KilogramToPound(float kilogram)
+		private static float KilogramToPound(float kilogram)
 		{
 			float pound = kilogram * 2.205f;
 			return pound;
 		}
 
-		public static float PoundToKilogram(float pound)
+		private static float PoundToKilogram(float pound)
 		{
 			float kilogram = pound / 2.205f;
 			return kilogram;
 		}
 
-		public static float FeetAndInchToFeet(float feet, float inch)
+		private static float FeetAndInchToFeet(float feet, float inch)
 		{
 			float newFeet = feet + (inch / 12f);
 			return newFeet;
 		}
 
-		public static float MeterAndCentimeterToMeter(float meter, float centimeter)
+		private static float MeterAndCentimeterToMeter(float meter, float centimeter)
 		{
 			float newMeter = meter + (centimeter / 100f);
 			return newMeter;
 		}
 
-		public static float PoundAndOunceToPound(float pound, float ounce)
+		private static float PoundAndOunceToPound(float pound, float ounce)
 		{
 			float newPound = pound + (ounce / 16f);
 			return newPound;
 		}
 
-		public static float KilogramAndGramToKilogram(float kilogram, float gram)
+		private static float KilogramAndGramToKilogram(float kilogram, float gram)
 		{
 			float newKilogram = kilogram + (gram / 100f);
 			return newKilogram;
 		}
 
-		public static string DisplayMetricLength(float meter)
+		private static string DisplayMetricHeight(float meter)
 		{
 			float newMeter = (float)Math.Floor(meter);
 			float centimeter = meter % 100f;
@@ -100,7 +131,7 @@ namespace ItemEvaluator
 			return returnString;
 		}
 
-		public static string DisplayImperialLength(float feet)
+		private static string DisplayImperialHeight(float feet)
 		{
 			float newFeet = (float)Math.Floor(feet);
 			float inches = feet % 12f;
@@ -114,7 +145,7 @@ namespace ItemEvaluator
 			return returnString;
 		}
 
-		public static string DisplayMetricWeight(float kilogram)
+		private static string DisplayMetricWeight(float kilogram)
 		{
 			float newKilogram = (float)Math.Floor(kilogram);
 			float gram = kilogram % 100f;
@@ -128,7 +159,7 @@ namespace ItemEvaluator
 			return returnString;
 		}
 
-		public static string DisplayImperialWeight(float pound)
+		private static string DisplayImperialWeight(float pound)
 		{
 			float newPound = (float)Math.Floor(pound);
 			float ounches = pound % 16f;

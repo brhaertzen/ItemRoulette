@@ -8,9 +8,10 @@ namespace ItemEvaluator
 {
 	class SettingsMenu : Menu
 	{
-		public override void Enter()
+		public override MenuState Enter()
 		{
 			MenuStateEnterText($"You are now in Settings.");
+			return MenuState.MainMenu;
 		}
 	}
 }

@@ -9,8 +9,10 @@ namespace ItemEvaluator
 	public class Menu
 	{
 		protected static string lineBreak = "========================================";
-		public virtual void Enter()
+		protected static string quote = "\"";
+		public virtual MenuState Enter()
 		{
+			return MenuState.Start;
 		}
 
 		protected static void MenuStateEnterText(string enterStatement)

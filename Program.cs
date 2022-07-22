@@ -12,7 +12,7 @@ namespace ItemEvaluator
 		{
 			Console.Title = "Item Evaluator";
 			Navigator navigator = new Navigator();
-			navigator.Enter();
+			navigator.EnterNavigator();
 		}
 	}
 }

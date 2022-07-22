@@ -10,9 +10,9 @@ namespace ItemEvaluator
 	{
 		public TemperatureScale TemperatureScalePref { get; private set; }
 		public MeasurementSystem MeasurementSystemPref { get; private set; }
-		public ColorTag FavoriteColor { get; private set; }
+		public ConsoleColor FavoriteColor { get; private set; }
 
-		public UserSettings(TemperatureScale temperatureScalePref, MeasurementSystem measurementSystemPref, ColorTag favoriteColor)
+		public UserSettings(TemperatureScale temperatureScalePref, MeasurementSystem measurementSystemPref, ConsoleColor favoriteColor)
 		{
 			this.TemperatureScalePref = temperatureScalePref;
 			this.MeasurementSystemPref = measurementSystemPref;
