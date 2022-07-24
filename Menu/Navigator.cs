@@ -112,7 +112,7 @@ namespace ItemEvaluator
 
 		private void EnterUserSelector()
 		{
-			UserSelectMenu userSelectorMenu = new UserSelectMenu(UserList, CurrentUser);
+			UserSelectMenu userSelectorMenu = new UserSelectMenu(this, UserList, CurrentUser);
 			MenuState nextMenuState = userSelectorMenu.Enter();
 			NavigateTo(nextMenuState, canReturnToMainMenu);
 		}

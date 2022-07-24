@@ -9,19 +9,38 @@ namespace ItemEvaluator
 	public class User
 	{
 		public string Name { get; private set; }
-		public UserSettings UserSettings { get; private set; }
+		public TemperatureScale TemperatureScalePref { get; private set; }
+		public MeasurementSystem MeasurementSystemPref { get; private set; }
+		public ConsoleColor TextColorPref { get; private set; }
 		public int ItemsCreated { get; private set; } = 0;
 		public int EvaluatorTokens { get; private set; } = 0;
 
-		public User(String name, UserSettings settings)
+		public User(String name, TemperatureScale temperatureScalePref, MeasurementSystem measurementSystemPref, ConsoleColor textColorPref)
 		{
 			this.Name = name;
-			this.UserSettings = settings;
+			this.TemperatureScalePref = temperatureScalePref;
+			this.MeasurementSystemPref = measurementSystemPref;
+			this.TextColorPref = textColorPref;
 		}
 
 		public void AdjustUserName(string newName)
 		{
 			this.Name = newName;
+		}
+
+		public void AdjustTemperatureScalePref(TemperatureScale newTemperatureScale)
+		{
+			TemperatureScalePref = newTemperatureScale;
+		}
+
+		public void AdjustMeasurementSystemPref(MeasurementSystem newMeasurementSystem)
+		{
+			MeasurementSystemPref = newMeasurementSystem;
+		}
+
+		public void AdjustTextColorPref(ConsoleColor newTextColor)
+		{
+			TextColorPref = newTextColor;
 		}
 
 		public int IncreaseItemsCreatedCount()

@@ -35,8 +35,7 @@ namespace ItemEvaluator
 			ConsoleColor newTextColor = GetTextColor(out returnToMainMenu);
 			if (returnToMainMenu)
 				return MenuState.MainMenu;
-			UserSettings newSettings = new UserSettings(newTemperatureScale, newMeasurementSystem, newTextColor);
-			User newUser = new User(newName, newSettings);
+			User newUser = new User(newName, newTemperatureScale, newMeasurementSystem, newTextColor);
 			userList.Add(newUser);
 			navigator.UpdateUserAndList(userList, newUser);
 			Console.WriteLine(

@@ -24,9 +24,9 @@ namespace ItemEvaluator
 			Console.WriteLine(
 				$"Your current User Settings are:\n" +
 				$"User Name: {currentUser.Name}\n" +
-				$"Temperature Scale: {currentUser.UserSettings.TemperatureScalePref}\n" +
-				$"Measurement System: {currentUser.UserSettings.MeasurementSystemPref}\n" +
-				$"Text Color: {currentUser.UserSettings.TextColorPref}");
+				$"Temperature Scale: {currentUser.TemperatureScalePref}\n" +
+				$"Measurement System: {currentUser.MeasurementSystemPref}\n" +
+				$"Text Color: {currentUser.TextColorPref}");
 			bool validResponse = true;
 			while (validResponse)
 			{
@@ -115,7 +115,7 @@ namespace ItemEvaluator
 				else
 					Console.WriteLine($"Invalid Temperature Scale. Please try again.");
 			}
-			currentUser.UserSettings.AdjustTemperatureScalePref(newTemperatureScale);
+			currentUser.AdjustTemperatureScalePref(newTemperatureScale);
 		}
 
 		private void AdjustMeasurementSystem()
@@ -143,7 +143,7 @@ namespace ItemEvaluator
 				else
 					Console.WriteLine($"Invalid Measurement System. Please try again.");
 			}
-			currentUser.UserSettings.AdjustMeasurementSystemPref(newMeasurementSystem);
+			currentUser.AdjustMeasurementSystemPref(newMeasurementSystem);
 		}
 
 		private void AdjustTextColor()
@@ -208,7 +208,7 @@ namespace ItemEvaluator
 				else
 					Console.WriteLine($"Invalid Color. Please try again.");
 			}
-			currentUser.UserSettings.AdjustTextColorPref(newTextColor);
+			currentUser.AdjustTextColorPref(newTextColor);
 		}
 	}
 }
