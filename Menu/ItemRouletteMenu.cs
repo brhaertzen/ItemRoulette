@@ -6,11 +6,15 @@ using System.Threading.Tasks;
 
 namespace ItemEvaluator
 {
-	class SettingsMenu : Menu
+	public class ItemRouletteMenu : Menu
 	{
+		public ItemRouletteMenu()
+		{
+		}
+
 		public override MenuState Enter()
 		{
-			MenuStateEnterText($"You are now in Settings.");
+			MenuStateEnterText($"You are now in the Item Roulette.");
 			return MenuState.MainMenu;
 		}
 	}

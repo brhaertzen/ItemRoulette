@@ -6,67 +6,67 @@ using System.Threading.Tasks;
 
 namespace ItemEvaluator
 {
-	public class UserCreatorMenu : Menu
+	public class UserSettingsMenu : Menu
 	{
-		private List<User> userList = new List<User>();
-		private Navigator navigator;
-		private bool canGoToMainMenu;
-		private string returnToMainMenuOption = $"Type {quote}Escape{quote} to return to Main Menu.";
-
-		public UserCreatorMenu(Navigator navigator, List<User> userList, bool canGoToMainMenu)
+		private List<User> userList;
+		private User currentUser;
+		
+		public UserSettingsMenu(List<User> userList, User currentUser)
 		{
-			this.navigator = navigator;
 			this.userList = userList;
-			this.canGoToMainMenu = canGoToMainMenu;
+			this.currentUser = currentUser;
 		}
 
 		public override MenuState Enter()
 		{
-			MenuStateEnterText($"You are now in the User Creator.");
-			string newName = GetName(out bool returnToMainMenu);
-			if (returnToMainMenu)
-				return MenuState.MainMenu;
-			TemperatureScale newTemperatureScale = GetTemperatureScale(out returnToMainMenu);
-			if (returnToMainMenu)
-				return MenuState.MainMenu;
-			MeasurementSystem newMeasurementSystem = GetMeasurementSystem(out returnToMainMenu);
-			if (returnToMainMenu)
-				return MenuState.MainMenu;
-			ConsoleColor newTextColor = GetTextColor(out returnToMainMenu);
-			if (returnToMainMenu)
-				return MenuState.MainMenu;
-			UserSettings newSettings = new UserSettings(newTemperatureScale, newMeasurementSystem, newTextColor);
-			User newUser = new User(newName, newSettings);
-			userList.Add(newUser);
-			navigator.UpdateUserAndList(userList, newUser);
+			MenuStateEnterText($"You are now in User Settings.");
+
+			Console.WriteLine(
+				$"Your current User Settings are:\n" +
+				$"User Name: {currentUser.Name}\n" +
+				$"Temperature Scale: {currentUser.UserSettings.TemperatureScalePref}\n" +
+				$"Measurement System: {currentUser.UserSettings.MeasurementSystemPref}\n" +
+				$"Text Color: {currentUser.UserSettings.TextColorPref}");
+			bool validResponse = true;
+			while (validResponse)
+			{
+				Console.WriteLine(
+				$"\n" +
+				$"Type {quote}Name{quote} to edit User Name.\n" +
+				$"Type {quote}Temperature{quote} to edit Temperature Scale Preference.\n" +
+				$"Type {quote}Measurement{quote} to edit Measurement System Preference.\n" +
+				$"Type {quote}Text{quote} to edit Text Color Preference.\n" +
+				$"Type {quote}Escape{quote} to return to Main Menu.");
+				string optionResponse = Console.ReadLine().ToLower();
+				if (optionResponse == "escape")				
+					return MenuState.MainMenu;									
+				else if (optionResponse == "name")				
+					AdjustName();				
+				else if (optionResponse == "temperature")				
+					AdjustTemperatureScale();				
+				else if (optionResponse == "measurement")				
+					AdjustMeasurementSystem();				
+				else if (optionResponse == "text")				
+					AdjustTextColor();				
+				else
+					Console.WriteLine($"Invalid response. Please try again.\n");
+			}
+			
+
+			return MenuState.MainMenu;
+		}		
+
+		private void AdjustName()
+		{
 			Console.WriteLine(
 				$"\n" +
-				$"New User {newName} has been created!\n" +
-				$"Temperature Scale Preference: {newTemperatureScale}.\n" +
-				$"Measurement System Preference: {newMeasurementSystem}.\n" +
-				$"Text Color Preference: {newTextColor}.\n" +
-				$"Press any button to return to Main Menu.");
-			Console.ReadKey();			
-			return MenuState.MainMenu;
-		}
-
-		private string GetName(out bool returnToMainMenu)
-		{
-			returnToMainMenu = false;
-			Console.WriteLine($"Please enter a name for your new User.");
-			if (canGoToMainMenu)
-				Console.WriteLine($"{returnToMainMenuOption}");
+				$"Please enter a new User Name.");
 			bool validName = false;
 			string nameResponse = "";
 			while (!validName)
 			{
 				nameResponse = Console.ReadLine();
 				string nameResponseLower = nameResponse.ToLower();
-				if (nameResponseLower == "escape" && canGoToMainMenu)
-				{
-					returnToMainMenu = true;
-					return null;
-				}
 				if (userList.Count == 0)
 					break;
 				foreach (var user in userList)
@@ -80,159 +80,135 @@ namespace ItemEvaluator
 					}
 				}
 			}
-			Console.WriteLine($"Username set to {nameResponse}.");
-			return nameResponse;
+			Console.WriteLine($"New User Name set to {nameResponse}.");
+			currentUser.AdjustUserName(nameResponse);
 		}
 
-		private TemperatureScale GetTemperatureScale(out bool returnToMainMenu)
+		private void AdjustTemperatureScale()
 		{
-			returnToMainMenu = false;
 			Console.WriteLine(
 				$"\n" +
 				$"Please enter your preferred Temperature Scale between {quote}Fahrenheit{quote}, {quote}Celsius{quote}, & {quote}Kelvin{quote}.");
-			if (canGoToMainMenu)
-				Console.WriteLine($"{returnToMainMenuOption}");
 			bool validTemperatureResponse = false;
-			TemperatureScale temperatureScale = TemperatureScale.Fahrenheit;
+			TemperatureScale newTemperatureScale = TemperatureScale.Fahrenheit;
 			while (!validTemperatureResponse)
 			{
 				string temperatureResponse = Console.ReadLine().ToLower();
-				if (temperatureResponse == "escape" && canGoToMainMenu)
-				{
-					returnToMainMenu = true;
-					return TemperatureScale.Fahrenheit;
-				}
-				else if (temperatureResponse == "fahrenheit")
+				if (temperatureResponse == "fahrenheit")
 				{
 					Console.WriteLine($"Temperature Scale Preference set to Fahrenheit.");
-					temperatureScale = TemperatureScale.Fahrenheit;
+					newTemperatureScale = TemperatureScale.Fahrenheit;
 					validTemperatureResponse = true;
 				}
 				else if (temperatureResponse == "celsius")
 				{
 					Console.WriteLine($"Temperature Scale Preference set to Celsius.");
-					temperatureScale = TemperatureScale.Celsius;
+					newTemperatureScale = TemperatureScale.Celsius;
 					validTemperatureResponse = true;
 				}
 				else if (temperatureResponse == "kelvin")
 				{
 					Console.WriteLine($"Temperature Scale Preference set to Kelvin.");
-					temperatureScale = TemperatureScale.Kelvin;
+					newTemperatureScale = TemperatureScale.Kelvin;
 					validTemperatureResponse = true;
 				}
 				else
 					Console.WriteLine($"Invalid Temperature Scale. Please try again.");
 			}
-			return temperatureScale;
+			currentUser.UserSettings.AdjustTemperatureScalePref(newTemperatureScale);
 		}
 
-		private MeasurementSystem GetMeasurementSystem(out bool returnToMainMenu)
+		private void AdjustMeasurementSystem()
 		{
-			returnToMainMenu = false;
 			Console.WriteLine(
 				$"\n" +
 				$"Please enter your preferred System of Measurement between {quote}Imperial{quote} & {quote}Metric{quote}.");
-			if (canGoToMainMenu)
-				Console.WriteLine($"{returnToMainMenuOption}");
 			bool validMeasurementResponse = false;
-			MeasurementSystem measurementSystem = MeasurementSystem.Imperial;
+			MeasurementSystem newMeasurementSystem = MeasurementSystem.Imperial;
 			while (!validMeasurementResponse)
 			{
 				string measurementResponse = Console.ReadLine().ToLower();
-				if (measurementResponse == "escape" && canGoToMainMenu)
-				{
-					returnToMainMenu = true;
-					return MeasurementSystem.Imperial;
-				}
-				else if (measurementResponse == "imperial")
+				if (measurementResponse == "imperial")
 				{
 					Console.WriteLine($"Measurement System Preference set to Imperial.");
-					measurementSystem = MeasurementSystem.Imperial;
+					newMeasurementSystem = MeasurementSystem.Imperial;
 					validMeasurementResponse = true;
 				}
 				else if (measurementResponse == "metric")
 				{
 					Console.WriteLine($"Measurement System Preference set to Metric.");
-					measurementSystem = MeasurementSystem.Metric;
+					newMeasurementSystem = MeasurementSystem.Metric;
 					validMeasurementResponse = true;
 				}
 				else
 					Console.WriteLine($"Invalid Measurement System. Please try again.");
 			}
-			return measurementSystem;
+			currentUser.UserSettings.AdjustMeasurementSystemPref(newMeasurementSystem);
 		}
 
-		private ConsoleColor GetTextColor(out bool returnToMainMenu)
+		private void AdjustTextColor()
 		{
-			returnToMainMenu = false;
 			Console.WriteLine(
 				$"\n" +
 				$"Please enter your preferred Text Color among these options:\n" +
 				$"{quote}Red{quote}, {quote}Yellow{quote}, {quote}Green{quote}, {quote}Blue{quote}, {quote}Cyan{quote}, {quote}Magenta{quote}, {quote}Gray{quote}, & {quote}White{quote}.");
-			if (canGoToMainMenu)
-				Console.WriteLine($"{returnToMainMenuOption}");
 			bool validColorResponse = false;
-			ConsoleColor textColor = ConsoleColor.White;
+			ConsoleColor newTextColor = ConsoleColor.White;
 			while (!validColorResponse)
 			{
 				string colorResponse = Console.ReadLine().ToLower();
-				if (colorResponse == "escape" && canGoToMainMenu)
-				{
-					returnToMainMenu = true;
-					return ConsoleColor.White;
-				}
-				else if (colorResponse == "red")
+				if (colorResponse == "red")
 				{
 					Console.WriteLine("Text Color Preference set to Red.");
-					textColor = ConsoleColor.Red;
+					newTextColor = ConsoleColor.Red;
 					validColorResponse = true;
 				}
 				else if (colorResponse == "yellow")
 				{
 					Console.WriteLine("Text Color Preference set to Yellow.");
-					textColor = ConsoleColor.Yellow;
+					newTextColor = ConsoleColor.Yellow;
 					validColorResponse = true;
 				}
 				else if (colorResponse == "green")
 				{
 					Console.WriteLine("Text Color Preference set to Green.");
-					textColor = ConsoleColor.Green;
+					newTextColor = ConsoleColor.Green;
 					validColorResponse = true;
 				}
 				else if (colorResponse == "blue")
 				{
 					Console.WriteLine("Text Color Preference set to Blue.");
-					textColor = ConsoleColor.Blue;
+					newTextColor = ConsoleColor.Blue;
 					validColorResponse = true;
 				}
 				else if (colorResponse == "cyan")
 				{
 					Console.WriteLine("Text Color Preference set to Cyan.");
-					textColor = ConsoleColor.Cyan;
+					newTextColor = ConsoleColor.Cyan;
 					validColorResponse = true;
 				}
 				else if (colorResponse == "magenta")
 				{
 					Console.WriteLine("Text Color Preference set to Magenta.");
-					textColor = ConsoleColor.Magenta;
+					newTextColor = ConsoleColor.Magenta;
 					validColorResponse = true;
 				}
 				else if (colorResponse == "gray" || colorResponse == "grey")
 				{
 					Console.WriteLine("Text Color Preference set to Gray.");
-					textColor = ConsoleColor.Gray;
+					newTextColor = ConsoleColor.Gray;
 					validColorResponse = true;
 				}
 				else if (colorResponse == "white")
 				{
 					Console.WriteLine("Text Color Preference set to White.");
-					textColor = ConsoleColor.White;
+					newTextColor = ConsoleColor.White;
 					validColorResponse = true;
 				}
 				else
 					Console.WriteLine($"Invalid Color. Please try again.");
 			}
-			return textColor;
+			currentUser.UserSettings.AdjustTextColorPref(newTextColor);
 		}
 	}
 }

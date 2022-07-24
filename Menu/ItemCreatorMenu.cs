@@ -8,6 +8,10 @@ namespace ItemEvaluator
 {
 	public class ItemCreatorMenu : Menu
 	{
+		public ItemCreatorMenu()
+		{
+		}
+
 		public override MenuState Enter()
 		{
 			MenuStateEnterText($"You are now in the Item Creator.");

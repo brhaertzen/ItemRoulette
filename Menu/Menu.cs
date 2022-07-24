@@ -8,7 +8,7 @@ namespace ItemEvaluator
 {
 	public class Menu
 	{
-		protected static string lineBreak = "========================================";
+		protected static string lineBreak = "================================================================================";
 		protected static string quote = "\"";
 		public virtual MenuState Enter()
 		{

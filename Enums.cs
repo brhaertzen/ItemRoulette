@@ -10,9 +10,11 @@ namespace ItemEvaluator
 	{
 		Start,
 		MainMenu,
+		UserSelect,
 		UserCreator,
 		ItemCreator,
-		Settings,
+		ItemRoulette,
+		UserSettings,
 		Exit
 	}
 

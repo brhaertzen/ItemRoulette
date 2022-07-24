@@ -6,30 +6,52 @@ using System.Threading.Tasks;
 
 namespace ItemEvaluator
 {
-	class MainMenu : Menu
+	public class MainMenu : Menu
 	{
+		private User currentUser;
+		public MainMenu(User currentUser)
+		{
+			this.currentUser = currentUser;
+		}
+
 		public override MenuState Enter()
 		{
 			MenuStateEnterText($"Welcome to the Main Menu!");
 			Console.WriteLine(
+				$"You are currently set to User {currentUser.Name}.\n" +
+				$"\n" +
 				$"Where would you like to go?\n" +
-				$"Type 1 to go into the Item Creator.\n" +
-				$"Type 2 to go into the User Creator.\n" +
-				$"Type 3 to go into User Settings.\n" +
-				$"Type 4 to to Exit the Application.");
-			int intInput;
-			bool isInt = int.TryParse(Console.ReadLine(), out intInput);
-			while (!isInt)
+				$"Type {quote}User{quote} to go to User Select.\n" +
+				$"Type {quote}New{quote} to create a New User.\n" +
+				$"Type {quote}Item{quote} to go into the Item Creator and earn Evaluator Tokens.");
+			if (currentUser.EvaluatorTokens == 1)			
+				Console.WriteLine($"Type {quote}Roulette{quote} to go into the Item Roulette. You have {currentUser.EvaluatorTokens} Evaluator Token to use.");			
+			else if (currentUser.EvaluatorTokens > 1)			
+				Console.WriteLine($"Type {quote}Roulette{quote} to go into the Item Roulette. You have {currentUser.EvaluatorTokens} Evaluator Tokens to use.");			
+			else			
+				Console.WriteLine($"You have 0 Evaluator Tokens. Earn more so you can use the Item Roulette.");			
+			Console.WriteLine(
+				$"Type {quote}Settings{quote} to go into your User Settings.\n" +
+				$"Type {quote}Exit{quote} to Exit the Application.");
+				
+			bool validMenu = false;
+			while (!validMenu)
 			{
-				Console.WriteLine($"Invalid Input, please try again.");
-				isInt = int.TryParse(Console.ReadLine(), out intInput);
-			}
-			switch (intInput)
-			{
-				case 1: return MenuState.ItemCreator;
-				case 2: return MenuState.UserCreator;
-				case 3: return MenuState.Settings;
-				case 4: return MenuState.Exit;
+				string menuResponse = Console.ReadLine().ToLower();
+				if (menuResponse == "user")
+					return MenuState.UserSelect;
+				else if (menuResponse == "new")
+					return MenuState.UserCreator;
+				else if (menuResponse == "item")
+					return MenuState.ItemCreator;
+				else if (menuResponse == "roulette" && currentUser.EvaluatorTokens > 0)
+					return MenuState.ItemRoulette;
+				else if (menuResponse == "settings")
+					return MenuState.UserSettings;
+				else if (menuResponse == "exit")
+					return MenuState.Exit;
+				else
+					Console.WriteLine("Invalid response. Please try again.");
 			}
 			return MenuState.MainMenu;
 		}

@@ -11,6 +11,7 @@ namespace ItemEvaluator
 		public string Name { get; private set; }
 		public UserSettings UserSettings { get; private set; }
 		public int ItemsCreated { get; private set; } = 0;
+		public int EvaluatorTokens { get; private set; } = 0;
 
 		public User(String name, UserSettings settings)
 		{
@@ -18,14 +19,27 @@ namespace ItemEvaluator
 			this.UserSettings = settings;
 		}
 
-		public void AdjustUserSettings(UserSettings newSettings)
+		public void AdjustUserName(string newName)
 		{
-			this.UserSettings = newSettings;
+			this.Name = newName;
 		}
 
-		public void IncreaseItemsCreatedCount()
+		public int IncreaseItemsCreatedCount()
 		{
 			ItemsCreated++;
+			return ItemsCreated;
+		}
+
+		public int GiveEvaluatorToken()
+		{
+			EvaluatorTokens++;
+			return EvaluatorTokens;
+		}
+
+		public int UseEvaluatorTokens()
+		{
+			EvaluatorTokens--;
+			return EvaluatorTokens;
 		}
 	}
 }
