@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace ItemEvaluator
 {
-	public class Vector2
+	public struct Vector2
 	{
-		public double x { get; set; }
-		public double y { get; set; }
+		public double x { get; private set; }
+		public double y { get; private set; }
 
 		public Vector2(double x, double y)
 		{

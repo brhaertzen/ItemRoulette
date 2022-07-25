@@ -13,6 +13,19 @@ namespace ItemEvaluator
 		private User currentUser;
 		private MeasurementSystem MSP;
 		private TemperatureScale TSP;
+		private string displayItemTags =
+			$"{(ItemTags)1} {(ItemTags)2} {(ItemTags)3} {(ItemTags)4} {(ItemTags)5}\n" +
+			$"{(ItemTags)6} {(ItemTags)7} {(ItemTags)8} {(ItemTags)9} {(ItemTags)10}\n" +
+			$"{(ItemTags)11} {(ItemTags)12} {(ItemTags)13} {(ItemTags)14} {(ItemTags)15}\n" +
+			$"{(ItemTags)16} {(ItemTags)17} {(ItemTags)18} {(ItemTags)19} {(ItemTags)20}\n" +
+			$"{(ItemTags)21} {(ItemTags)22} {(ItemTags)23} {(ItemTags)24} {(ItemTags)25}\n" +
+			$"{(ItemTags)26} {(ItemTags)27} {(ItemTags)28} {(ItemTags)29} {(ItemTags)30}\n" +
+			$"{(ItemTags)31} {(ItemTags)32} {(ItemTags)33} {(ItemTags)34} {(ItemTags)35}\n" +
+			$"{(ItemTags)36} {(ItemTags)37} {(ItemTags)38} {(ItemTags)39} {(ItemTags)40}\n" +
+			$"{(ItemTags)41} {(ItemTags)42} {(ItemTags)43} {(ItemTags)44} {(ItemTags)45}";
+		private string displayColorTags =
+			$"{ConsoleColor.Red} {ConsoleColor.Yellow} {ConsoleColor.Green} {ConsoleColor.Blue}\n" +
+			$"{ConsoleColor.Cyan} {ConsoleColor.Magenta} {ConsoleColor.Gray} {ConsoleColor.White}";
 
 		public ItemCreatorMenu(Navigator navigator, List<Item> itemList, User currentUser)
 		{
@@ -77,13 +90,11 @@ namespace ItemEvaluator
 				string keepCreatingResponse = Console.ReadLine().ToLower();
 				if (keepCreatingResponse == "escape")
 				{
-					validResponse = true;
 					keepCreatingItems = false;
 					return;
 				}
 				else if (keepCreatingResponse == "item")
 				{
-					validResponse = true;
 					keepCreatingItems = true;
 					return;
 				}
@@ -174,7 +185,7 @@ namespace ItemEvaluator
 					returnToMainMenu = true;
 					return new Vector2(0, 0);
 				}
-				else if (int.TryParse(smallWeightResponse, out int result) && MeasurementConverter.MaximumSmallWeight(MSP) > result)				
+				else if (int.TryParse(smallWeightResponse, out int result) && MeasurementConverter.MaximumSmallWeight(MSP) >= result)				
 					validSmallWeight = true;				
 				else if (largeWeight == 0 && result == 0)				
 					Console.WriteLine($"Invalid Reponse. Item Weight Cannot be 0. Please try again.");				
@@ -225,7 +236,7 @@ namespace ItemEvaluator
 					returnToMainMenu = true;
 					return new Vector2(0, 0);
 				}
-				else if (int.TryParse(smallHeightResponse, out int result) && MeasurementConverter.MaximumSmallHeight(MSP) > result)
+				else if (int.TryParse(smallHeightResponse, out int result) && MeasurementConverter.MaximumSmallHeight(MSP) >= result)
 				{
 					validSmallHeight = true;
 				}
@@ -263,6 +274,7 @@ namespace ItemEvaluator
 				}
 				else if (hasTemperatureResponse == "no")
 				{
+					Console.WriteLine();
 					newItemHasTemperature = false;
 					return 0;
 				}
@@ -298,13 +310,182 @@ namespace ItemEvaluator
 		private List<ItemTags> GetItemTags(out bool returnToMainMenu)
 		{
 			returnToMainMenu = false;
-			return new List<ItemTags>();
+			Console.WriteLine(
+				$"Add some tags to your item! Here is the list of all available tags. Add as many as you can.\n" +
+				$"{displayItemTags}\n" +
+				returnToMainMenuOption);
+			bool hasValidFirstItemTagResponse = false;
+			string firstItemResponse = "";
+			List<ItemTags> itemTagsList = new List<ItemTags>();
+			Dictionary<string, ItemTags> itemTagStringsDict = new Dictionary<string, ItemTags>();
+			for (int i = 1; i <= 45; i++)
+			{
+				ItemTags tempItemTag = (ItemTags)i;
+				string stringItemTag = tempItemTag.ToString().ToLower();
+				itemTagStringsDict.Add(stringItemTag, tempItemTag);
+			}
+			while (!hasValidFirstItemTagResponse)
+			{
+				firstItemResponse = Console.ReadLine().ToLower();
+				if (firstItemResponse == "escape")
+				{
+					returnToMainMenu = true;
+					return new List<ItemTags>();
+				}
+				else if (itemTagStringsDict.ContainsKey(firstItemResponse))
+				{
+					hasValidFirstItemTagResponse = true;
+					itemTagStringsDict.TryGetValue(firstItemResponse, out ItemTags firstItemTag);
+					itemTagsList.Add(firstItemTag);
+					Console.WriteLine($"{firstItemTag} added to Item Tags.\n");
+				}
+				else
+					Console.WriteLine($"Invalid Response. Please try again.");
+			}
+			Console.WriteLine(
+					$"Your current Item Tags are: {DisplayItemTags(itemTagsList)}.\n" +
+					$"Would you like to add more?\n" +
+					$"Type {quote}Done{quote} anytime if you are done adding Item Tags.\n" +
+					returnToMainMenuOption);
+			bool hasValidMoreItemTagsResponse = false;
+			string moreItemTagsResponse = "";
+			while (!hasValidMoreItemTagsResponse)
+			{				
+				moreItemTagsResponse = Console.ReadLine().ToLower();
+				if (moreItemTagsResponse == "escape")
+				{
+					returnToMainMenu = true;
+					return new List<ItemTags>();
+				}
+				else if (moreItemTagsResponse == "done")				
+					hasValidMoreItemTagsResponse = true;				
+				else if (itemTagStringsDict.ContainsKey(moreItemTagsResponse))
+				{
+					itemTagStringsDict.TryGetValue(moreItemTagsResponse, out ItemTags moreItemTag);
+					if (itemTagsList.Contains(moreItemTag))					
+						Console.WriteLine($"{moreItemTag} already added to Item Tags. Please try again.");					
+					else
+					{
+						itemTagsList.Add(moreItemTag);
+						Console.WriteLine($"{moreItemTag} added to Item Tags. Your current Item Tags are: {DisplayItemTags(itemTagsList)}.");
+					}					
+				}
+				else
+					Console.WriteLine($"Invalid Response. Please try again.");
+			}
+			Console.WriteLine();
+			return itemTagsList;
 		}
 
 		private List<ConsoleColor> GetColorTags(out bool returnToMainMenu)
 		{
 			returnToMainMenu = false;
-			return new List<ConsoleColor>();
+			Console.WriteLine(
+				$"Add some Colors to your item! Here is the list of all available Colors. You can add up to 2.\n" +
+				$"{displayColorTags}\n" +
+				returnToMainMenuOption);
+			bool hasValidFirstColorTagResponse = false;
+			List<ConsoleColor> colorTagsList = new List<ConsoleColor>();
+			Dictionary<string, ConsoleColor> colorTagStringsDict = new Dictionary<string, ConsoleColor>();
+			colorTagStringsDict.Add("red", ConsoleColor.Red);
+			colorTagStringsDict.Add("yellow", ConsoleColor.Yellow);
+			colorTagStringsDict.Add("green", ConsoleColor.Green);
+			colorTagStringsDict.Add("blue", ConsoleColor.Blue);
+			colorTagStringsDict.Add("cyan", ConsoleColor.Cyan);
+			colorTagStringsDict.Add("magenta", ConsoleColor.Magenta);
+			colorTagStringsDict.Add("gray", ConsoleColor.Gray);
+			colorTagStringsDict.Add("white", ConsoleColor.White);
+			while (!hasValidFirstColorTagResponse)
+			{
+				string firstColorResponse = Console.ReadLine().ToLower();
+				if (firstColorResponse == "escape")
+				{
+					returnToMainMenu = true;
+					return new List<ConsoleColor>();
+				}
+				else if (colorTagStringsDict.ContainsKey(firstColorResponse))
+				{
+					hasValidFirstColorTagResponse = true;
+					colorTagStringsDict.TryGetValue(firstColorResponse, out ConsoleColor firstColorTag);
+					colorTagsList.Add(firstColorTag);
+					Console.WriteLine($"{firstColorTag} added to Item Colors.\n");
+				}
+				else
+					Console.WriteLine($"Invalid Response. Please try again.");
+			}
+			Console.WriteLine(
+				$"You can add one more color to your item.\n" +
+				$"Or type {quote}Done{quote} if you are done adding colors.\n" +
+				returnToMainMenuOption);
+			bool hasValidSecondColorTagResponse = false;
+			while (!hasValidSecondColorTagResponse)
+			{
+				string secondColorResponse = Console.ReadLine().ToLower();
+				if (secondColorResponse == "escape")
+				{
+					returnToMainMenu = true;
+					return new List<ConsoleColor>();
+				}
+				else if (secondColorResponse == "done")				
+					return colorTagsList;				
+				else if (colorTagStringsDict.ContainsKey(secondColorResponse))
+				{
+					hasValidSecondColorTagResponse = true;
+					colorTagStringsDict.TryGetValue(secondColorResponse, out ConsoleColor secondColorTag);
+					if (colorTagsList.Contains(secondColorTag))					
+						Console.WriteLine($"{secondColorTag} already added to Item Colors. Please try again.");					
+					else
+					{
+						colorTagsList.Add(secondColorTag);
+						Console.WriteLine($"{secondColorTag} added to Item Colors. Your current Items Colors are {DisplayColorTags(colorTagsList)}.\n");
+					}
+				}
+			}
+			return colorTagsList;
+		}
+
+		private string DisplayItemTags(List<ItemTags> itemTagsList)
+		{
+			string displayTags = "";
+			if (itemTagsList.Count == 1)			
+				displayTags = $"{itemTagsList[0]}";
+			else if (itemTagsList.Count == 2)
+			{
+				displayTags = $"{itemTagsList[0]}";
+				displayTags += $" & {itemTagsList[1]}";
+			}
+			else if (itemTagsList.Count > 2)
+			{
+				displayTags = $"{itemTagsList[0]}";
+				for (int i = 1; i < itemTagsList.Count - 1; i++)
+				{
+					displayTags += $", {itemTagsList[i]}";
+				}
+				displayTags += $", & {itemTagsList[itemTagsList.Count - 1]}";
+			}			
+			return displayTags;
+		}
+
+		private string DisplayColorTags(List<ConsoleColor> colorTagsList)
+		{
+			string displayTags = "";
+			if (colorTagsList.Count == 1)
+				displayTags = $"{colorTagsList[0]}";
+			else if (colorTagsList.Count == 2)
+			{
+				displayTags = $"{colorTagsList[0]}";
+				displayTags += $" & {colorTagsList[1]}";
+			}
+			else if (colorTagsList.Count > 2)
+			{
+				displayTags = $"{colorTagsList[0]}";
+				for (int i = 1; i < colorTagsList.Count - 1; i++)
+				{
+					displayTags += $", {colorTagsList[i]}";
+				}
+				displayTags += $", & {colorTagsList[colorTagsList.Count - 1]}";
+			}
+			return displayTags;
 		}
 	}
 }

@@ -215,7 +215,7 @@ namespace ItemEvaluator
 					textColor = ConsoleColor.Magenta;
 					validColorResponse = true;
 				}
-				else if (colorResponse == "gray" || colorResponse == "grey")
+				else if (colorResponse == "gray")
 				{
 					Console.WriteLine("Text Color Preference set to Gray.");
 					textColor = ConsoleColor.Gray;
