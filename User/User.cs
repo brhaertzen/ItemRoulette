@@ -49,16 +49,42 @@ namespace ItemEvaluator
 			return ItemsCreated;
 		}
 
-		public int GiveEvaluatorToken()
+		public int DecreaseItemsCreatedCount()
 		{
-			EvaluatorTokens++;
+			ItemsCreated--;
+			return ItemsCreated;
+		}
+
+		public int GiveEvaluatorToken(int tokenIncrease)
+		{
+			EvaluatorTokens += tokenIncrease;
 			return EvaluatorTokens;
 		}
 
-		public int UseEvaluatorTokens()
+		public int UseEvaluatorTokens(int tokenDecrease)
 		{
-			EvaluatorTokens--;
+			EvaluatorTokens -= tokenDecrease;
 			return EvaluatorTokens;
+		}
+
+		public string StateEvaluatorTokens()
+		{
+			if (EvaluatorTokens == 0)
+				return $"{EvaluatorTokens} Evaluator Tokens";
+			else if (EvaluatorTokens == 1)
+				return $"{EvaluatorTokens} Evaluator Token";
+			else
+				return $"{EvaluatorTokens} Evaluator Tokens";
+		}
+
+		public string StateItemsCreated()
+		{
+			if (ItemsCreated == 0)
+				return $"{ItemsCreated} Items created";
+			else if (ItemsCreated == 1)
+				return $"{ItemsCreated} Item created";
+			else
+				return $"{ItemsCreated} Items created";
 		}
 	}
 }

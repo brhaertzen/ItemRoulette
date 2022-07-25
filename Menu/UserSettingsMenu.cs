@@ -19,7 +19,7 @@ namespace ItemEvaluator
 
 		public override MenuState Enter()
 		{
-			MenuStateEnterText($"You are now in User Settings.");
+			MenuStateEnterText($"You are now in your User Settings.");
 
 			Console.WriteLine(
 				$"Your current User Settings are:\n" +

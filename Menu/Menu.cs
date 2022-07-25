@@ -8,20 +8,21 @@ namespace ItemEvaluator
 {
 	public class Menu
 	{
-		protected static string lineBreak = "================================================================================";
-		protected static string quote = "\"";
+		protected const string lineBreak = "================================================================================";
+		protected const string quote = "\"";
+		protected string returnToMainMenuOption = $"Type {quote}Escape{quote} to return to Main Menu.";
 		public virtual MenuState Enter()
 		{
 			return MenuState.Start;
 		}
 
-		protected static void MenuStateEnterText(string enterStatement)
+		protected void MenuStateEnterText(string enterStatement)
 		{			
 			Console.WriteLine(
 				$"\n" +
 				$"{lineBreak}\n" +
 				$"\n" +
 				$"{enterStatement}\n");
-		}
+		}		
 	}
 }

@@ -11,19 +11,18 @@ namespace ItemEvaluator
 		private List<User> userList = new List<User>();
 		private Navigator navigator;
 		private bool canGoToMainMenu;
-		private string returnToMainMenuOption = $"Type {quote}Escape{quote} to return to Main Menu.";
 
-		public UserCreatorMenu(Navigator navigator, List<User> userList, bool canGoToMainMenu)
+		public UserCreatorMenu(Navigator navigator, List<User> userList)
 		{
 			this.navigator = navigator;
 			this.userList = userList;
-			this.canGoToMainMenu = canGoToMainMenu;
+			this.canGoToMainMenu = userList.Count > 0;
 		}
 
 		public override MenuState Enter()
 		{
 			MenuStateEnterText($"You are now in the User Creator.");
-			string newName = GetName(out bool returnToMainMenu);
+			string newName = GetUserName(out bool returnToMainMenu);
 			if (returnToMainMenu)
 				return MenuState.MainMenu;
 			TemperatureScale newTemperatureScale = GetTemperatureScale(out returnToMainMenu);
@@ -37,7 +36,7 @@ namespace ItemEvaluator
 				return MenuState.MainMenu;
 			User newUser = new User(newName, newTemperatureScale, newMeasurementSystem, newTextColor);
 			userList.Add(newUser);
-			navigator.UpdateUserAndList(userList, newUser);
+			navigator.UpdateUserAndUserList(userList, newUser);
 			Console.WriteLine(
 				$"\n" +
 				$"New User {newName} has been created!\n" +
@@ -49,12 +48,12 @@ namespace ItemEvaluator
 			return MenuState.MainMenu;
 		}
 
-		private string GetName(out bool returnToMainMenu)
+		private string GetUserName(out bool returnToMainMenu)
 		{
 			returnToMainMenu = false;
 			Console.WriteLine($"Please enter a name for your new User.");
 			if (canGoToMainMenu)
-				Console.WriteLine($"{returnToMainMenuOption}");
+				Console.WriteLine(returnToMainMenuOption);
 			bool validName = false;
 			string nameResponse = "";
 			while (!validName)
@@ -90,7 +89,7 @@ namespace ItemEvaluator
 				$"\n" +
 				$"Please enter your preferred Temperature Scale between {quote}Fahrenheit{quote}, {quote}Celsius{quote}, & {quote}Kelvin{quote}.");
 			if (canGoToMainMenu)
-				Console.WriteLine($"{returnToMainMenuOption}");
+				Console.WriteLine(returnToMainMenuOption);
 			bool validTemperatureResponse = false;
 			TemperatureScale temperatureScale = TemperatureScale.Fahrenheit;
 			while (!validTemperatureResponse)
@@ -132,7 +131,7 @@ namespace ItemEvaluator
 				$"\n" +
 				$"Please enter your preferred System of Measurement between {quote}Imperial{quote} & {quote}Metric{quote}.");
 			if (canGoToMainMenu)
-				Console.WriteLine($"{returnToMainMenuOption}");
+				Console.WriteLine(returnToMainMenuOption);
 			bool validMeasurementResponse = false;
 			MeasurementSystem measurementSystem = MeasurementSystem.Imperial;
 			while (!validMeasurementResponse)
@@ -169,7 +168,7 @@ namespace ItemEvaluator
 				$"Please enter your preferred Text Color among these options:\n" +
 				$"{quote}Red{quote}, {quote}Yellow{quote}, {quote}Green{quote}, {quote}Blue{quote}, {quote}Cyan{quote}, {quote}Magenta{quote}, {quote}Gray{quote}, & {quote}White{quote}.");
 			if (canGoToMainMenu)
-				Console.WriteLine($"{returnToMainMenuOption}");
+				Console.WriteLine(returnToMainMenuOption);
 			bool validColorResponse = false;
 			ConsoleColor textColor = ConsoleColor.White;
 			while (!validColorResponse)

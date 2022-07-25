@@ -13,36 +13,43 @@ namespace ItemEvaluator
 		public List<User> UserList { get; private set; } = new List<User>();
 		public List<Item> ItemList { get; private set; } = new List<Item>();
 
-		static bool canReturnToMainMenu = true;
-		static bool canNotReturnToMainMenu = false;
-
 		public void EnterNavigator()
 		{			
-			NavigateTo(MenuState.Start, true);
+			Navigate();
 		}
 
-		public void NavigateTo(MenuState nextMenuState, bool canGoToMainMenu)
+		public void Navigate()
 		{
-			switch (nextMenuState)
+			MenuState nextMenuState = MenuState.Start;
+			while (true)
 			{
-				case MenuState.Start: Start(); break;
-				case MenuState.MainMenu: EnterMainMenu(); break;
-				case MenuState.ItemCreator: EnterItemCreator(); break;
-				case MenuState.ItemRoulette: EnterItemRoulette(); break;
-				case MenuState.UserSelect: EnterUserSelector(); break;
-				case MenuState.UserCreator: EnterUserCreator(canGoToMainMenu); break;
-				case MenuState.UserSettings: EnterUserSettings(); break;
-				case MenuState.Exit: Environment.Exit(0); break;
-			}			
+				switch (nextMenuState)
+				{
+					case MenuState.Start: nextMenuState = Start(); break;
+					case MenuState.MainMenu: nextMenuState = EnterMainMenu(); break;
+					case MenuState.ItemCreator: nextMenuState = EnterItemCreator(); break;
+					case MenuState.ItemViewer: nextMenuState = EnterItemViewer(); break;
+					case MenuState.ItemRoulette: nextMenuState = EnterItemRoulette(); break;
+					case MenuState.UserSelect: nextMenuState = EnterUserSelector(); break;
+					case MenuState.UserCreator: nextMenuState = EnterUserCreator(); break;
+					case MenuState.UserSettings: nextMenuState = EnterUserSettings(); break;
+					case MenuState.Exit: Environment.Exit(0); break;
+				}
+			}					
 		}
 
-		public void UpdateUserAndList(List<User> userList, User user)
+		public void UpdateUserAndUserList(List<User> userList, User user)
 		{
 			this.UserList = userList;
 			this.CurrentUser = user;
 		}
 
-		private void Start()
+		public void UpdateItemList(List<Item> itemList)
+		{
+			this.ItemList = itemList;
+		}
+
+		private MenuState Start()
 		{
 			MenuStateEnterText(
 				$"Welcome to the Item Evaluator Application!\n" +
@@ -50,8 +57,7 @@ namespace ItemEvaluator
 			if (UserList.Count == 0)
 			{
 				Console.WriteLine($"There are no users created. Please create a User to continue.");
-				NavigateTo(MenuState.UserCreator, canNotReturnToMainMenu);
-				return;
+				return MenuState.UserCreator;
 			}
 			Console.WriteLine($"Please select a User by typing their name from the following list:");
 			Dictionary<string, User> nameDict = new Dictionary<string, User>();
@@ -68,60 +74,69 @@ namespace ItemEvaluator
 				if (userResponse == "new user")
 				{
 					validUserOption = true;
-					NavigateTo(MenuState.UserCreator, canReturnToMainMenu);
+					return MenuState.UserCreator;
 				}
 				else if (nameDict.ContainsKey(userResponse))
 				{
+					validUserOption = true;
 					nameDict.TryGetValue(userResponse, out User nextSelectedUser);
 					CurrentUser = nextSelectedUser;
 					Console.WriteLine($"User set to {CurrentUser.Name}");
-					NavigateTo(MenuState.MainMenu, canReturnToMainMenu);
+					return MenuState.MainMenu;
 				}
 				else
 					Console.WriteLine($"Invalid Response. Please try again.");				
 			}
+			return MenuState.MainMenu;
 		}
 
-		private void EnterMainMenu()
+		private MenuState EnterMainMenu()
 		{
-			MainMenu mainMenu = new MainMenu(CurrentUser);
+			MainMenu mainMenu = new MainMenu(UserList, CurrentUser);
 			MenuState nextMenuState = mainMenu.Enter();
-			NavigateTo(nextMenuState, canReturnToMainMenu);
+			return nextMenuState;
 		}
 
-		private void EnterItemCreator()
+		private MenuState EnterItemCreator()
 		{			
-			ItemCreatorMenu itemCreator = new ItemCreatorMenu();
+			ItemCreatorMenu itemCreator = new ItemCreatorMenu(this, ItemList, CurrentUser);
 			MenuState nextMenuState =  itemCreator.Enter();
-			NavigateTo(nextMenuState, canReturnToMainMenu);
+			return nextMenuState;
 		}
 
-		private void EnterUserCreator(bool canGoToMainMenu)
-		{			
-			UserCreatorMenu userCreator = new UserCreatorMenu(this, UserList, canGoToMainMenu);
-			MenuState nextMenuState = userCreator.Enter();
-			NavigateTo(nextMenuState, canReturnToMainMenu);
-		}
-
-		private void EnterUserSettings()
-		{			
-			UserSettingsMenu userSettingsMenu = new UserSettingsMenu(UserList, CurrentUser);
-			MenuState nextMenuState = userSettingsMenu.Enter();
-			NavigateTo(nextMenuState, canReturnToMainMenu);
-		}		
-
-		private void EnterUserSelector()
+		private MenuState EnterItemViewer()
 		{
-			UserSelectMenu userSelectorMenu = new UserSelectMenu(this, UserList, CurrentUser);
-			MenuState nextMenuState = userSelectorMenu.Enter();
-			NavigateTo(nextMenuState, canReturnToMainMenu);
+			ItemViewerMenu itemViewer = new ItemViewerMenu();
+			MenuState nextMenuState = itemViewer.Enter();
+			return nextMenuState;
 		}
 
-		private void EnterItemRoulette()
+		private MenuState EnterItemRoulette()
 		{
 			ItemRouletteMenu itemRouletteMenu = new ItemRouletteMenu();
 			MenuState nextMenuState = itemRouletteMenu.Enter();
-			NavigateTo(nextMenuState, canReturnToMainMenu);
+			return nextMenuState;
 		}
+
+		private MenuState EnterUserSelector()
+		{
+			UserSelectMenu userSelectorMenu = new UserSelectMenu(this, UserList, CurrentUser);
+			MenuState nextMenuState = userSelectorMenu.Enter();
+			return nextMenuState;
+		}
+
+		private MenuState EnterUserCreator()
+		{			
+			UserCreatorMenu userCreator = new UserCreatorMenu(this, UserList);
+			MenuState nextMenuState = userCreator.Enter();
+			return nextMenuState;
+		}
+
+		private MenuState EnterUserSettings()
+		{			
+			UserSettingsMenu userSettingsMenu = new UserSettingsMenu(UserList, CurrentUser);
+			MenuState nextMenuState = userSettingsMenu.Enter();
+			return nextMenuState;
+		}				
 	}
 }

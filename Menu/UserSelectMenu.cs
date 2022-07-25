@@ -22,12 +22,11 @@ namespace ItemEvaluator
 		public override MenuState Enter()
 		{
 			MenuStateEnterText($"You are now in User Select.");
-
 			Console.WriteLine($"Please select a User by typing their name from the following list:");
 			Dictionary<string, User> nameDict = new Dictionary<string, User>();
 			foreach (var user in userList)
 			{
-				nameDict.Add(user.Name, user);
+				nameDict.Add(user.Name.ToLower(), user);
 				Console.WriteLine($"{quote}{user.Name}{quote}");
 			}
 			bool validUserOption = false;
@@ -39,7 +38,7 @@ namespace ItemEvaluator
 					validUserOption = true;
 					nameDict.TryGetValue(userResponse, out User nextSelectedUser);
 					currentUser = nextSelectedUser;
-					navigator.UpdateUserAndList(userList, currentUser);
+					navigator.UpdateUserAndUserList(userList, currentUser);
 					Console.WriteLine(
 						$"\n" +
 						$"User set to {currentUser.Name}\n" +
