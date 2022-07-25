@@ -9,52 +9,29 @@ namespace ItemEvaluator
 	public static class MeasurementConverter
 	{
 		//Values are saved in database as imperial for all height and weight. Conversion needed to save and retrieve
-		public static float SaveValueHeight(MeasurementSystem measurementSystem, float meterOrFeet, float centimeterOrInch)
+		public static Vector2 SaveValueHeight(MeasurementSystem measurementSystem, double largeValue, double smallValue)
 		{
-			float saveValue;
+			Vector2 saveValue;
 			if (measurementSystem == MeasurementSystem.Imperial)			
-				saveValue = FeetAndInchToFeet(meterOrFeet, centimeterOrInch);			
-			else
-			{
-				saveValue = MeterAndCentimeterToMeter(meterOrFeet, centimeterOrInch);
-				saveValue = MeterToFeet(saveValue);
-			}
+				saveValue = new Vector2(largeValue, smallValue);			
+			else							
+				saveValue = MetricToImperialHeight(largeValue, smallValue);			
 			return saveValue;
 		}
 
-		public static float SaveValueWeight(MeasurementSystem measurementSystem, float kilogramOrPound, float gramOrOunce)
+		public static Vector2 SaveValueWeight(MeasurementSystem measurementSystem, double largeValue, double smallValue)
 		{
-			float saveValue;
+			Vector2 saveValue;
 			if (measurementSystem == MeasurementSystem.Imperial)			
-				saveValue = PoundAndOunceToPound(kilogramOrPound, gramOrOunce);			
-			else
-			{
-				saveValue = KilogramAndGramToKilogram(kilogramOrPound, gramOrOunce);
-				saveValue = KilogramToPound(saveValue);
-			}
+				saveValue = new Vector2(largeValue, smallValue);			
+			else			
+				saveValue = MetricToImperialWeight(largeValue, smallValue);			
 			return saveValue;
 		}
 
-		public static string DisplayValueHeight(MeasurementSystem measurementSystem, float height)
+		public static string DisplayValueWeight(MeasurementSystem measurementSystem, Vector2 weight)
 		{
-			float value;
-			string displayValue;
-			if (measurementSystem == MeasurementSystem.Imperial)
-			{
-				value = height;
-				displayValue = DisplayImperialHeight(value);
-			}
-			else
-			{
-				value = FeetToMeter(height);
-				displayValue = DisplayMetricHeight(value);
-			}
-			return displayValue;
-		}
-
-		public static string DisplayValueWeight(MeasurementSystem measurementSystem, float weight)
-		{
-			float value;
+			Vector2 value;
 			string displayValue;
 			if (measurementSystem == MeasurementSystem.Imperial)
 			{
@@ -63,113 +40,210 @@ namespace ItemEvaluator
 			}
 			else
 			{
-				value = PoundToKilogram(weight);
+				value = ImperialToMetricWeight(weight.x, weight.y);
 				displayValue = DisplayMetricWeight(value);
 			}
 			return displayValue;
 		}
 
-		private static float MeterToFeet(float meter)
+		public static string DisplayValueHeight(MeasurementSystem measurementSystem, Vector2 height)
 		{
-			float feet = meter * 3.281f;
+			Vector2 value;
+			string displayValue;
+			if (measurementSystem == MeasurementSystem.Imperial)
+			{
+				value = height;
+				displayValue = DisplayImperialHeight(value);
+			}
+			else
+			{
+				value = ImperialToMetricHeight(height.x, height.y);
+				displayValue = DisplayMetricHeight(value);
+			}
+			return displayValue;
+		}
+
+		public static string GetLargeHeightName(MeasurementSystem measurementSystem)
+		{
+			string name;
+			if (measurementSystem == MeasurementSystem.Imperial)
+				name = $"Feet";
+			else
+				name = $"Meters";
+			return name;
+		}
+
+		public static string GetSmallHeightName(MeasurementSystem measurementSystem)
+		{
+			string name;
+			if (measurementSystem == MeasurementSystem.Imperial)
+				name = $"Inches";
+			else
+				name = $"Centimeters";
+			return name;
+		}
+
+		public static string GetLargeWeightName(MeasurementSystem measurementSystem)
+		{
+			string name;
+			if (measurementSystem == MeasurementSystem.Imperial)
+				name = $"Pounds";
+			else
+				name = $"Kilograms";
+			return name;
+		}
+
+		public static string GetSmallWeightName(MeasurementSystem measurementSystem)
+		{
+			string name;
+			if (measurementSystem == MeasurementSystem.Imperial)
+				name = $"Ounces";
+			else
+				name = $"Grams";
+			return name;
+		}				
+
+		public static double MaximumSmallWeight(MeasurementSystem measurementSystem)
+		{
+			double weight;
+			if (measurementSystem == MeasurementSystem.Imperial)
+				weight = 15f;
+			else
+				weight = 999f;
+			return weight;
+		}
+
+		public static double MaximumSmallHeight(MeasurementSystem measurementSystem)
+		{
+			double height;
+			if (measurementSystem == MeasurementSystem.Imperial)
+				height = 11f;
+			else
+				height = 99f;
+			return height;
+		}
+
+		private static Vector2 MetricToImperialWeight(double kilogram, double gram)
+		{
+			double pound = KilogramToPound(kilogram);
+			double ounce = GramToOunce(gram);
+			return new Vector2(pound, ounce);
+		}
+
+		public static Vector2 ImperialToMetricWeight(double pound, double ounce)
+		{
+			double kilogram = PoundToKilogram(pound);
+			double gram = OunceToGram(ounce);
+			return new Vector2(kilogram, gram);
+		}
+
+		public static Vector2 MetricToImperialHeight(double meter, double centimeter)
+		{
+			double feet = MeterToFeet(meter);
+			double inch = CentimeterToInch(centimeter);
+			return new Vector2(feet, inch);
+		}		
+
+		public static Vector2 ImperialToMetricHeight(double feet, double inch)
+		{
+			double meter = FeetToMeter(feet);
+			double centimeter = InchToCentimeter(inch);
+			return new Vector2(meter, centimeter);
+		}
+
+		private static double MeterToFeet(double meter)
+		{
+			double feet = meter * 3.281f;
 			return feet;
 		}
 
-		private static float FeetToMeter(float feet)
+		private static double FeetToMeter(double feet)
 		{
-			float meter = feet / 3.281f;
+			double meter = feet / 3.281f;
 			return meter;
 		}
 
-		private static float KilogramToPound(float kilogram)
+		private static double CentimeterToInch(double centimeter)
 		{
-			float pound = kilogram * 2.205f;
+			double inch = centimeter * 2.54f;
+			return inch;
+		}
+
+		private static double InchToCentimeter(double inch)
+		{
+			double centimeter = inch / 2.54f;
+			return centimeter;
+		}
+
+		private static double KilogramToPound(double kilogram)
+		{
+			double pound = kilogram * 2.205f;
 			return pound;
 		}
 
-		private static float PoundToKilogram(float pound)
+		private static double PoundToKilogram(double pound)
 		{
-			float kilogram = pound / 2.205f;
+			double kilogram = pound / 2.205f;
 			return kilogram;
 		}
 
-		private static float FeetAndInchToFeet(float feet, float inch)
+		private static double GramToOunce(double gram)
 		{
-			float newFeet = feet + (inch / 12f);
-			return newFeet;
+			double ounce = gram / 28.3495;
+			return ounce;
 		}
 
-		private static float MeterAndCentimeterToMeter(float meter, float centimeter)
+		private static double OunceToGram(double ounce)
 		{
-			float newMeter = meter + (centimeter / 100f);
-			return newMeter;
-		}
+			double gram = ounce * 28.3495;
+			return gram;
+		}	
 
-		private static float PoundAndOunceToPound(float pound, float ounce)
+		private static string DisplayMetricHeight(Vector2 height)
 		{
-			float newPound = pound + (ounce / 16f);
-			return newPound;
-		}
-
-		private static float KilogramAndGramToKilogram(float kilogram, float gram)
-		{
-			float newKilogram = kilogram + (gram / 100f);
-			return newKilogram;
-		}
-
-		private static string DisplayMetricHeight(float meter)
-		{
-			float newMeter = (float)Math.Floor(meter);
-			float centimeter = meter % 100f;
 			string returnString;
-			if (newMeter == 0f)			
-				returnString = $"{centimeter} cm";			
-			else if (centimeter == 0f)			
-				returnString = $"{newMeter} m";			
+			if (height.x == 0f)			
+				returnString = $"{height.y}cm";			
+			else if (height.y == 0f)			
+				returnString = $"{height.x}m";			
 			else			
-				returnString = $"{newMeter} m {centimeter} cm";			
+				returnString = $"{height.x}m {height.y}cm";			
 			return returnString;
 		}
 
-		private static string DisplayImperialHeight(float feet)
+		private static string DisplayImperialHeight(Vector2 height)
 		{
-			float newFeet = (float)Math.Floor(feet);
-			float inches = feet % 12f;
 			string returnString;
-			if (newFeet == 0f)
-				returnString = $"{inches} in";
-			else if (inches == 0f)
-				returnString = $"{newFeet} ft";
+			if (height.x == 0f)
+				returnString = $"{height.y}in";
+			else if (height.y == 0f)
+				returnString = $"{height.x}ft";
 			else
-				returnString = $"{newFeet} ft {inches} in";
+				returnString = $"{height.x}ft {height.y}in";
 			return returnString;
 		}
 
-		private static string DisplayMetricWeight(float kilogram)
+		private static string DisplayMetricWeight(Vector2 weight)
 		{
-			float newKilogram = (float)Math.Floor(kilogram);
-			float gram = kilogram % 100f;
 			string returnString;
-			if (newKilogram == 0f)
-				returnString = $"{gram} g";
-			else if (gram == 0f)
-				returnString = $"{newKilogram} kg";
+			if (weight.x == 0f)
+				returnString = $"{weight.y}g";
+			else if (weight.y == 0f)
+				returnString = $"{weight.x}kg";
 			else
-				returnString = $"{newKilogram} kg {gram} g";
+				returnString = $"{weight.x}kg {weight.y}g";
 			return returnString;
 		}
 
-		private static string DisplayImperialWeight(float pound)
+		private static string DisplayImperialWeight(Vector2 weight)
 		{
-			float newPound = (float)Math.Floor(pound);
-			float ounches = pound % 16f;
 			string returnString;
-			if (pound == 0f)
-				returnString = $"{ounches} oz";
-			else if (ounches == 0f)
-				returnString = $"{newPound} lb";
+			if (weight.x == 0f)
+				returnString = $"{weight.y} oz";
+			else if (weight.y == 0f)
+				returnString = $"{weight.x} lb";
 			else
-				returnString = $"{newPound} lb {ounches} oz";
+				returnString = $"{weight.x} lb {weight.y} oz";
 			return returnString;
 		}
 	}

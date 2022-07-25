@@ -9,7 +9,7 @@ namespace ItemEvaluator
 	static class TemperatureConverter
 	{
 		//Values are saved in database as fahrenheit for all temperatures. Conversion needed to save and retrieve
-		public static double SaveValueTemperature(TemperatureScale temperatureScale, float temperature)
+		public static double SaveValueTemperature(TemperatureScale temperatureScale, double temperature)
 		{
 			double saveTemp;
 			if (temperatureScale == TemperatureScale.Fahrenheit)
@@ -17,27 +17,31 @@ namespace ItemEvaluator
 			else if (temperatureScale == TemperatureScale.Celsius)
 				saveTemp = CelsiusToFahrenheit(temperature);
 			else
-				saveTemp = KelvinToFahrenheit(temperature);			
+				saveTemp = KelvinToFahrenheit(temperature);
+			saveTemp = Math.Round(saveTemp);
 			return saveTemp;
 		}
 				
-		public static string DisplayValueTemperature(TemperatureScale temperatureScale, float temperature)
+		public static string DisplayValueTemperature(TemperatureScale temperatureScale, double temperature)
 		{
 			double tempValue;
 			string displayValue;
 			if (temperatureScale == TemperatureScale.Fahrenheit)
 			{
 				tempValue = temperature;
+				tempValue = Math.Round(tempValue);
 				displayValue = DisplayFahrenheit(tempValue);
 			}									
 			else if (temperatureScale == TemperatureScale.Celsius)
 			{
 				tempValue = FahrenheitToCelsius(temperature);
+				tempValue = Math.Round(tempValue);
 				displayValue = DisplayCelsius(tempValue);
 			}									
 			else
 			{
 				tempValue = FahrenheitToKelvin(temperature);
+				tempValue = Math.Round(tempValue);
 				displayValue = DisplayKelvin(tempValue);
 			}								
 			return displayValue;
@@ -45,19 +49,19 @@ namespace ItemEvaluator
 
 		private static double FahrenheitToCelsius(double fahrenheitTemp)
 		{
-			double celciusTemp = (5 / 9) * (fahrenheitTemp - 32f);
+			double celciusTemp = (5f / 9f) * (fahrenheitTemp - 32f);
 			return celciusTemp;
 		}
 
 		private static double FahrenheitToKelvin(double fahrenheitTemp)
 		{
-			double kelvinTemp = ((5 / 9) * (fahrenheitTemp - 32f)) + 273f;
+			double kelvinTemp = ((5f / 9f) * (fahrenheitTemp - 32f)) + 273f;
 			return kelvinTemp;
 		}
 
 		private static double CelsiusToFahrenheit(double celsiusTemp)
 		{
-			double fahrenheitTemp = ((9 / 5) * celsiusTemp) + 32f;
+			double fahrenheitTemp = ((9f / 5f) * celsiusTemp) + 32f;
 			return fahrenheitTemp;
 		}
 
@@ -69,7 +73,7 @@ namespace ItemEvaluator
 
 		private static double KelvinToFahrenheit(double kelvinTemp)
 		{
-			double fahrenheitTemp = ((9 / 5) * (kelvinTemp - 273f)) + 32f;
+			double fahrenheitTemp = ((9f / 5f) * (kelvinTemp - 273f)) + 32f;
 			return fahrenheitTemp;
 		}
 

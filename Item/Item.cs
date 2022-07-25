@@ -10,15 +10,15 @@ namespace ItemEvaluator
 	{
 		public string Name { get; private set; }
 		public User UserWhoCreated { get; private set; }
-		public double Weight { get; private set; }
-		public double Height { get; private set; }
+		public Vector2 Weight { get; private set; }
+		public Vector2 Height { get; private set; }
 		public bool HasTemperature { get; private set; } = false;
 		public double Temperature { get; private set; }
 		public List<ItemTags> ItemTags { get; private set; }
 		public List<ConsoleColor> ColorTags { get; private set; }
 
 		//Item with temperature
-		public Item(string name, User userWhoCreated, double weight, double height,
+		public Item(string name, User userWhoCreated, Vector2 weight, Vector2 height,
 			double temperature, List<ItemTags> itemTags, List<ConsoleColor> colorTags)
 		{
 			this.Name = name;
@@ -32,7 +32,7 @@ namespace ItemEvaluator
 		}
 
 		//Item without temperature
-		public Item(string name, User userWhoCreated, double weight, double height,
+		public Item(string name, User userWhoCreated, Vector2 weight, Vector2 height,
 			List<ItemTags> itemTags, List<ConsoleColor> colorTags)
 		{
 			this.Name = name;
