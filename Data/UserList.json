@@ -1,0 +1,26 @@
+[
+  {
+    "Name": "Brad",
+    "TemperatureScalePref": 0,
+    "MeasurementSystemPref": 1,
+    "TextColorPref": 12,
+    "ItemsCreated": 1,
+    "EvaluatorTokens": 1
+  },
+  {
+    "Name": "Camber",
+    "TemperatureScalePref": 2,
+    "MeasurementSystemPref": 0,
+    "TextColorPref": 14,
+    "ItemsCreated": 1,
+    "EvaluatorTokens": 1
+  },
+  {
+    "Name": "jessica",
+    "TemperatureScalePref": 2,
+    "MeasurementSystemPref": 0,
+    "TextColorPref": 10,
+    "ItemsCreated": 0,
+    "EvaluatorTokens": 0
+  }
+]

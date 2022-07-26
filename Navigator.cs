@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,12 +10,18 @@ namespace ItemEvaluator
 {	
 	public class Navigator : Menu
 	{
+
+		public string userListFilePath => ThisLocation() + @"\Data\UserList.json";
+		public string itemListFilePath => ThisLocation() + @"\Data\ItemList.json";
+		
 		public User CurrentUser { get; private set; }
 		public List<User> UserList { get; private set; } = new List<User>();
 		public List<Item> ItemList { get; private set; } = new List<Item>();
 
 		public void EnterNavigator()
-		{			
+		{
+			LoadItemList();
+			LoadUserList();
 			Navigate();
 		}
 
@@ -42,11 +49,13 @@ namespace ItemEvaluator
 		{
 			this.UserList = userList;
 			this.CurrentUser = user;
-		}
+			SaveUserList();
+		}		
 
 		public void UpdateItemList(List<Item> itemList)
 		{
 			this.ItemList = itemList;
+			SaveItemList();
 		}
 
 		private MenuState Start()
@@ -63,7 +72,7 @@ namespace ItemEvaluator
 			Dictionary<string, User> nameDict = new Dictionary<string, User>();
 			foreach (var user in UserList)
 			{
-				nameDict.Add(user.Name, user);
+				nameDict.Add(user.Name.ToLower(), user);
 				Console.WriteLine($"{quote}{user.Name}{quote}");
 			}				
 			Console.WriteLine($"Or type {quote}New User{quote} to create a new user.");
@@ -99,14 +108,14 @@ namespace ItemEvaluator
 
 		private MenuState EnterItemCreator()
 		{			
-			ItemCreatorMenu itemCreator = new ItemCreatorMenu(this, ItemList, CurrentUser);
+			ItemCreatorMenu itemCreator = new ItemCreatorMenu(this, ItemList, UserList, CurrentUser);
 			MenuState nextMenuState =  itemCreator.Enter();
 			return nextMenuState;
 		}
 
 		private MenuState EnterItemViewer()
 		{
-			ItemViewerMenu itemViewer = new ItemViewerMenu();
+			ItemViewerMenu itemViewer = new ItemViewerMenu(this, ItemList, UserList, CurrentUser);
 			MenuState nextMenuState = itemViewer.Enter();
 			return nextMenuState;
 		}
@@ -134,9 +143,46 @@ namespace ItemEvaluator
 
 		private MenuState EnterUserSettings()
 		{			
-			UserSettingsMenu userSettingsMenu = new UserSettingsMenu(UserList, CurrentUser);
+			UserSettingsMenu userSettingsMenu = new UserSettingsMenu(this, UserList, CurrentUser);
 			MenuState nextMenuState = userSettingsMenu.Enter();
 			return nextMenuState;
-		}				
+		}		
+		
+		private void SaveItemList()
+		{
+			var itemJson = JsonConvert.SerializeObject(ItemList, Formatting.Indented);
+			File.WriteAllText(itemListFilePath, itemJson);
+			
+		}
+
+		private void SaveUserList()
+		{
+			var userJson = JsonConvert.SerializeObject(UserList, Formatting.Indented);
+			File.WriteAllText(userListFilePath, userJson);
+		}
+
+		private void LoadItemList()
+		{
+			ItemList = JsonConvert.DeserializeObject<List<Item>>(File.ReadAllText(itemListFilePath));			
+		}
+
+		private void LoadUserList()
+		{
+			UserList = JsonConvert.DeserializeObject<List<User>>(File.ReadAllText(userListFilePath));
+		}
+
+		private string ThisLocation()
+		{
+			string location = Directory.GetCurrentDirectory();
+			string location2 = Path.GetDirectoryName(location);
+			string location3 = Path.GetDirectoryName(location2);
+			string location4 = Path.GetDirectoryName(location3);
+			//string location = System.AppDomain.CurrentDomain.BaseDirectory;
+			//string location = System.Reflection.Assembly.GetEntryAssembly().Location;
+			//string location = Path.GetDirectoryName(file);
+			//string location = Environment.CurrentDirectory;
+			//string location = AppDomain.CurrentDomain.BaseDirectory;
+			return location4;
+		}
 	}
 }

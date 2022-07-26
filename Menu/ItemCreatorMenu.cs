@@ -10,6 +10,7 @@ namespace ItemEvaluator
 	{
 		private Navigator navigator;
 		private List<Item> itemList;
+		private List<User> userList;
 		private User currentUser;
 		private MeasurementSystem MSP;
 		private TemperatureScale TSP;
@@ -27,10 +28,11 @@ namespace ItemEvaluator
 			$"{ConsoleColor.Red} {ConsoleColor.Yellow} {ConsoleColor.Green} {ConsoleColor.Blue}\n" +
 			$"{ConsoleColor.Cyan} {ConsoleColor.Magenta} {ConsoleColor.Gray} {ConsoleColor.White}";
 
-		public ItemCreatorMenu(Navigator navigator, List<Item> itemList, User currentUser)
+		public ItemCreatorMenu(Navigator navigator, List<Item> itemList,List<User> userList, User currentUser)
 		{
 			this.navigator = navigator;
 			this.itemList = itemList;
+			this.userList = userList;
 			this.currentUser = currentUser;
 			MSP = currentUser.MeasurementSystemPref;
 			TSP = currentUser.TemperatureScalePref;
@@ -47,6 +49,7 @@ namespace ItemEvaluator
 				CreateItem(out keepCreatingItems);
 			}			
 			navigator.UpdateItemList(itemList);
+			navigator.UpdateUserAndUserList(userList, currentUser);
 			return MenuState.MainMenu;
 		}
 
@@ -71,11 +74,7 @@ namespace ItemEvaluator
 			List<ConsoleColor> newColorTags = GetColorTags(out returnToMainMenu);
 			if (returnToMainMenu)
 				return;
-			Item newItem;
-			if (newItemHasTemperature)
-				newItem = new Item(newItemName, currentUser, newItemWeight, newItemHeight, newItemTemperature, newItemTags, newColorTags);
-			else
-				newItem = new Item(newItemName, currentUser, newItemWeight, newItemHeight, newItemTags, newColorTags);
+			Item newItem = new Item(newItemName, currentUser, newItemWeight, newItemHeight, newItemHasTemperature, newItemTemperature, newItemTags, newColorTags);			
 			itemList.Add(newItem);
 			currentUser.IncreaseItemsCreatedCount();
 			currentUser.GiveEvaluatorToken(1);

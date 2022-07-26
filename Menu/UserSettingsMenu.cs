@@ -8,11 +8,13 @@ namespace ItemEvaluator
 {
 	public class UserSettingsMenu : Menu
 	{
+		private Navigator navigator;
 		private List<User> userList;
 		private User currentUser;
 		
-		public UserSettingsMenu(List<User> userList, User currentUser)
+		public UserSettingsMenu(Navigator navigator, List<User> userList, User currentUser)
 		{
+			this.navigator = navigator;
 			this.userList = userList;
 			this.currentUser = currentUser;
 		}
@@ -20,7 +22,6 @@ namespace ItemEvaluator
 		public override MenuState Enter()
 		{
 			MenuStateEnterText($"You are now in your User Settings.");
-
 			Console.WriteLine(
 				$"Your current User Settings are:\n" +
 				$"User Name: {currentUser.Name}\n" +
@@ -38,8 +39,11 @@ namespace ItemEvaluator
 				$"Type {quote}Text{quote} to edit Text Color Preference.\n" +
 				$"Type {quote}Escape{quote} to return to Main Menu.");
 				string optionResponse = Console.ReadLine().ToLower();
-				if (optionResponse == "escape")				
-					return MenuState.MainMenu;									
+				if (optionResponse == "escape")
+				{
+					navigator.UpdateUserAndUserList(userList, currentUser);
+					return MenuState.MainMenu;
+				}														
 				else if (optionResponse == "name")				
 					AdjustName();				
 				else if (optionResponse == "temperature")				
@@ -50,9 +54,7 @@ namespace ItemEvaluator
 					AdjustTextColor();				
 				else
 					Console.WriteLine($"Invalid response. Please try again.\n");
-			}
-			
-
+			}			
 			return MenuState.MainMenu;
 		}		
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace ItemEvaluator
 {
@@ -12,15 +13,18 @@ namespace ItemEvaluator
 		public TemperatureScale TemperatureScalePref { get; private set; }
 		public MeasurementSystem MeasurementSystemPref { get; private set; }
 		public ConsoleColor TextColorPref { get; private set; }
-		public int ItemsCreated { get; private set; } = 0;
-		public int EvaluatorTokens { get; private set; } = 0;
+		public int ItemsCreated { get; private set; }
+		public int EvaluatorTokens { get; private set; }
 
-		public User(String name, TemperatureScale temperatureScalePref, MeasurementSystem measurementSystemPref, ConsoleColor textColorPref)
+		[JsonConstructor]
+		public User(String name, TemperatureScale temperatureScalePref, MeasurementSystem measurementSystemPref, ConsoleColor textColorPref, int itemsCreated, int evaluatorTokens)
 		{
 			this.Name = name;
 			this.TemperatureScalePref = temperatureScalePref;
 			this.MeasurementSystemPref = measurementSystemPref;
 			this.TextColorPref = textColorPref;
+			this.ItemsCreated = itemsCreated;
+			this.EvaluatorTokens = evaluatorTokens;
 		}
 
 		public void AdjustUserName(string newName)
