@@ -36,8 +36,7 @@ namespace ItemEvaluator
 				Console.WriteLine($"You have {currentUser.StateEvaluatorTokens()}. Earn more so you can use the Item Roulette.");			
 			Console.WriteLine(
 				$"Type {quote}Settings{quote} to go into your User Settings.\n" +
-				$"Type {quote}Exit{quote} to Exit the Application.");
-				
+				$"Type {quote}Exit{quote} to Exit the Application.");				
 			bool validMenu = false;
 			while (!validMenu)
 			{

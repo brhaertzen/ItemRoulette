@@ -43,7 +43,7 @@ namespace ItemEvaluator
 				$"Temperature Scale Preference: {newTemperatureScale}.\n" +
 				$"Measurement System Preference: {newMeasurementSystem}.\n" +
 				$"Text Color Preference: {newTextColor}.\n" +
-				$"Press any button to return to Main Menu.");
+				$"Press any key to return to Main Menu.");
 			Console.ReadKey();			
 			return MenuState.MainMenu;
 		}
@@ -165,8 +165,15 @@ namespace ItemEvaluator
 			returnToMainMenu = false;
 			Console.WriteLine(
 				$"\n" +
-				$"Please enter your preferred Text Color among these options:\n" +
-				$"{quote}Red{quote}, {quote}Yellow{quote}, {quote}Green{quote}, {quote}Blue{quote}, {quote}Cyan{quote}, {quote}Magenta{quote}, {quote}Gray{quote}, & {quote}White{quote}.");
+				$"Please enter your preferred Text Color among these options:");
+			WriteColor(ConsoleColor.Red, $"{quote}Red{quote}");
+			WriteColor(ConsoleColor.Yellow, $"{quote}Yellow{quote}");
+			WriteColor(ConsoleColor.Green, $"{quote}Green{quote}");
+			WriteColor(ConsoleColor.Blue, $"{quote}Blue{quote}");
+			WriteColor(ConsoleColor.Cyan, $"{quote}Cyan{quote}");
+			WriteColor(ConsoleColor.Magenta, $"{quote}Magenta{quote}");
+			WriteColor(ConsoleColor.Gray, $"{quote}Gray{quote}");
+			WriteColor(ConsoleColor.White, $"{quote}White{quote}");
 			if (canGoToMainMenu)
 				Console.WriteLine(returnToMainMenuOption);
 			bool validColorResponse = false;

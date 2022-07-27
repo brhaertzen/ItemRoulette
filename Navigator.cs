@@ -9,14 +9,12 @@ using Newtonsoft.Json;
 namespace ItemEvaluator
 {	
 	public class Navigator : Menu
-	{
-
-		public string userListFilePath => ThisLocation() + @"\Data\UserList.json";
-		public string itemListFilePath => ThisLocation() + @"\Data\ItemList.json";
-		
+	{				
 		public User CurrentUser { get; private set; }
 		public List<User> UserList { get; private set; } = new List<User>();
 		public List<Item> ItemList { get; private set; } = new List<Item>();
+		private string userListFilePath => Directory.GetCurrentDirectory() + @"\Data\UserList.json";
+		private string itemListFilePath => Directory.GetCurrentDirectory() + @"\Data\ItemList.json";
 
 		public void EnterNavigator()
 		{
@@ -25,7 +23,20 @@ namespace ItemEvaluator
 			Navigate();
 		}
 
-		public void Navigate()
+		public void UpdateUserAndUserList(List<User> userList, User user)
+		{
+			this.UserList = userList;
+			this.CurrentUser = user;
+			SaveUserList();
+		}
+
+		public void UpdateItemList(List<Item> itemList)
+		{
+			this.ItemList = itemList;
+			SaveItemList();
+		}
+
+		private void Navigate()
 		{
 			MenuState nextMenuState = MenuState.Start;
 			while (true)
@@ -43,20 +54,7 @@ namespace ItemEvaluator
 					case MenuState.Exit: Environment.Exit(0); break;
 				}
 			}					
-		}
-
-		public void UpdateUserAndUserList(List<User> userList, User user)
-		{
-			this.UserList = userList;
-			this.CurrentUser = user;
-			SaveUserList();
 		}		
-
-		public void UpdateItemList(List<Item> itemList)
-		{
-			this.ItemList = itemList;
-			SaveItemList();
-		}
 
 		private MenuState Start()
 		{
@@ -151,8 +149,7 @@ namespace ItemEvaluator
 		private void SaveItemList()
 		{
 			var itemJson = JsonConvert.SerializeObject(ItemList, Formatting.Indented);
-			File.WriteAllText(itemListFilePath, itemJson);
-			
+			File.WriteAllText(itemListFilePath, itemJson);			
 		}
 
 		private void SaveUserList()
@@ -171,18 +168,18 @@ namespace ItemEvaluator
 			UserList = JsonConvert.DeserializeObject<List<User>>(File.ReadAllText(userListFilePath));
 		}
 
-		private string ThisLocation()
-		{
+		private string ItemEvaluatorPath()
+		{			
 			string location = Directory.GetCurrentDirectory();
-			string location2 = Path.GetDirectoryName(location);
-			string location3 = Path.GetDirectoryName(location2);
-			string location4 = Path.GetDirectoryName(location3);
+			//location = Path.GetDirectoryName(location);
+			//location = Path.GetDirectoryName(location);
+			//location = Path.GetDirectoryName(location);
 			//string location = System.AppDomain.CurrentDomain.BaseDirectory;
 			//string location = System.Reflection.Assembly.GetEntryAssembly().Location;
 			//string location = Path.GetDirectoryName(file);
 			//string location = Environment.CurrentDirectory;
 			//string location = AppDomain.CurrentDomain.BaseDirectory;
-			return location4;
+			return location;
 		}
 	}
 }

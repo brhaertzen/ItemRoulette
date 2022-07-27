@@ -56,5 +56,34 @@
     "ColorTags": [
       9
     ]
+  },
+  {
+    "Name": "nintendo switch",
+    "UserWhoCreated": {
+      "Name": "Brad",
+      "TemperatureScalePref": 0,
+      "MeasurementSystemPref": 1,
+      "TextColorPref": 12,
+      "ItemsCreated": 2,
+      "EvaluatorTokens": 2
+    },
+    "Weight": {
+      "x": 12.0,
+      "y": 0.0
+    },
+    "Height": {
+      "x": 8.0,
+      "y": 0.0
+    },
+    "HasTemperature": false,
+    "Temperature": 0.0,
+    "ItemTags": [
+      18,
+      21,
+      43
+    ],
+    "ColorTags": [
+      7
+    ]
   }
 ]

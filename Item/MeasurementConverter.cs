@@ -239,11 +239,11 @@ namespace ItemEvaluator
 		{
 			string returnString;
 			if (weight.x == 0f)
-				returnString = $"{weight.y} oz";
+				returnString = $"{weight.y}oz";
 			else if (weight.y == 0f)
-				returnString = $"{weight.x} lb";
+				returnString = $"{weight.x}lb";
 			else
-				returnString = $"{weight.x} lb {weight.y} oz";
+				returnString = $"{weight.x}lb {weight.y}oz";
 			return returnString;
 		}
 	}

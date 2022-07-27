@@ -36,7 +36,7 @@ namespace ItemEvaluator
 				$"Type {quote}Name{quote} to edit User Name.\n" +
 				$"Type {quote}Temperature{quote} to edit Temperature Scale Preference.\n" +
 				$"Type {quote}Measurement{quote} to edit Measurement System Preference.\n" +
-				$"Type {quote}Text{quote} to edit Text Color Preference.\n" +
+				$"Type {quote}Color{quote} to edit Text Color Preference.\n" +
 				$"Type {quote}Escape{quote} to return to Main Menu.");
 				string optionResponse = Console.ReadLine().ToLower();
 				if (optionResponse == "escape")
@@ -50,7 +50,7 @@ namespace ItemEvaluator
 					AdjustTemperatureScale();				
 				else if (optionResponse == "measurement")				
 					AdjustMeasurementSystem();				
-				else if (optionResponse == "text")				
+				else if (optionResponse == "color")				
 					AdjustTextColor();				
 				else
 					Console.WriteLine($"Invalid response. Please try again.\n");
