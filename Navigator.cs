@@ -39,6 +39,14 @@ namespace ItemEvaluator
 			File.WriteAllText(userListFilePath, userJson);
 		}
 
+		public void AdjustUserName(string newName)
+		{
+			foreach (var item in ItemList)			
+				if (item.UserWhoCreated == CurrentUser.Name)				
+					item.AdjustUserWhoCreated(newName);	
+			CurrentUser.AdjustUserName(newName);
+		}
+
 		private void Navigate()
 		{
 			MenuState nextMenuState = MenuState.Start;
@@ -95,7 +103,7 @@ namespace ItemEvaluator
 					return MenuState.MainMenu;
 				}
 				else
-					Console.WriteLine($"Invalid Response. Please try again.");				
+					Console.WriteLine($"{invalidResponse}");
 			}
 			return MenuState.MainMenu;
 		}

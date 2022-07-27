@@ -30,7 +30,7 @@ namespace ItemEvaluator
 					return MenuState.MainMenu;
 				}
 				else
-					Console.WriteLine($"Invalid Response. Please try again.");
+					Console.WriteLine($"{invalidResponse}");
 			}
 			return MenuState.MainMenu;
 		}
@@ -71,7 +71,7 @@ namespace ItemEvaluator
 						$"{returnToMainMenuOption}");
 				}
 				else
-					Console.WriteLine("$Invalid Response. Please try again.");				
+					Console.WriteLine($"{invalidResponse}");
 			}
 		}
 

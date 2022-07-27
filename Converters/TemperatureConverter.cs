@@ -18,7 +18,7 @@ namespace ItemEvaluator
 				saveTemp = CelsiusToFahrenheit(temperature);
 			else
 				saveTemp = KelvinToFahrenheit(temperature);
-			saveTemp = Math.Round(saveTemp);
+			saveTemp = Math.Round(saveTemp, 2, MidpointRounding.AwayFromZero);
 			return saveTemp;
 		}
 				
@@ -29,22 +29,34 @@ namespace ItemEvaluator
 			if (temperatureScale == TemperatureScale.Fahrenheit)
 			{
 				tempValue = temperature;
-				tempValue = Math.Round(tempValue);
+				tempValue = Math.Round(tempValue, 2, MidpointRounding.AwayFromZero);
 				displayValue = DisplayFahrenheit(tempValue);
 			}									
 			else if (temperatureScale == TemperatureScale.Celsius)
 			{
 				tempValue = FahrenheitToCelsius(temperature);
-				tempValue = Math.Round(tempValue);
+				tempValue = Math.Round(tempValue, 2, MidpointRounding.AwayFromZero);
 				displayValue = DisplayCelsius(tempValue);
 			}									
 			else
 			{
 				tempValue = FahrenheitToKelvin(temperature);
-				tempValue = Math.Round(tempValue);
+				tempValue = Math.Round(tempValue, 2, MidpointRounding.AwayFromZero);
 				displayValue = DisplayKelvin(tempValue);
 			}								
 			return displayValue;
+		}
+
+		public static string GetTemperatureName(TemperatureScale temperatureScale)
+		{
+			string name;
+			if (temperatureScale == TemperatureScale.Fahrenheit)
+				name = $"Fahrenheit";
+			else if (temperatureScale == TemperatureScale.Celsius)
+				name = $"Celsius";
+			else
+				name = $"Kelvin";
+			return name;
 		}
 
 		private static double FahrenheitToCelsius(double fahrenheitTemp)

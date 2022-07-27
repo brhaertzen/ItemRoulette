@@ -90,7 +90,7 @@ namespace ItemEvaluator
 					return;
 				}
 				else
-					Console.WriteLine("Invalid Response. Please try again.");					
+					Console.WriteLine($"{invalidResponse}");					
 			}
 		}
 
@@ -159,15 +159,16 @@ namespace ItemEvaluator
 					validLargeWeight = true;
 				}
 				else
-					Console.WriteLine($"Invalid Response. Please try again.");
+					Console.WriteLine($"{invalidResponse}");
 			}
 			double largeWeight = Convert.ToDouble(largeWeightResponse);
 			Console.WriteLine(
-				$"Enter any remaining Weight in {MeasurementConverter.GetSmallWeightName(MSP)}. Use only whole numbers.\n" +
+				$"Enter any remaining Weight in {MeasurementConverter.GetSmallWeightName(MSP)}. It will be rounded to 2 decimal places.\n" +
 				$"Maximum value allowed: {MeasurementConverter.MaximumSmallWeight(MSP)}\n" +
 				returnToMainMenuOption);
 			bool validSmallWeight = false;
 			string smallWeightResponse = "";
+			double smallWeight = 0;
 			while (!validSmallWeight)
 			{
 				smallWeightResponse = Console.ReadLine().ToLower();
@@ -176,14 +177,16 @@ namespace ItemEvaluator
 					returnToMainMenu = true;
 					return new Vector2(0, 0);
 				}
-				else if (int.TryParse(smallWeightResponse, out int result) && MeasurementConverter.MaximumSmallWeight(MSP) >= result)				
-					validSmallWeight = true;				
-				else if (largeWeight == 0 && result == 0)				
-					Console.WriteLine($"Invalid Reponse. Item Weight Cannot be 0. Please try again.");				
+				else if (DetermineIfValidSmallValue(smallWeightResponse, out smallWeight) && MeasurementConverter.MaximumSmallWeight(MSP) >= smallWeight)
+				{
+					if (largeWeight == 0 && smallWeight == 0)
+						Console.WriteLine($"Invalid Reponse. Total Item Weight Cannot be 0. Please try again.");
+					else
+						validSmallWeight = true;
+				}								
 				else
-					Console.WriteLine($"Invalid Response. Please try again.");
+					Console.WriteLine($"{invalidResponse}");
 			}
-			double smallWeight = Convert.ToDouble(smallWeightResponse);
 			Vector2 saveValueWeight = MeasurementConverter.SaveValueWeight(MSP, largeWeight, smallWeight);
 			Console.WriteLine($"Weight set to {MeasurementConverter.DisplayValueWeight(MSP, saveValueWeight)}.\n");
 			return saveValueWeight;
@@ -210,15 +213,16 @@ namespace ItemEvaluator
 				else if (int.TryParse(largeHeightResponse, out int result))				
 					validLargeHeight = true;				
 				else
-					Console.WriteLine($"Invalid Response. Please try again.");
+					Console.WriteLine($"{invalidResponse}");
 			}
 			double largeHeight = Convert.ToDouble(largeHeightResponse);
 			Console.WriteLine(
-				$"Enter any remaining Height in {MeasurementConverter.GetSmallHeightName(MSP)}. Use only whole numbers.\n" +
+				$"Enter any remaining Height in {MeasurementConverter.GetSmallHeightName(MSP)}. It will be rounded to 2 decimal places.\n" +
 				$"Maximum value allowed: {MeasurementConverter.MaximumSmallHeight(MSP)}\n" +
 				returnToMainMenuOption);
 			bool validSmallHeight = false;
 			string smallHeightResponse = "";
+			double smallHeight = 0;
 			while (!validSmallHeight)
 			{
 				smallHeightResponse = Console.ReadLine().ToLower();
@@ -227,16 +231,16 @@ namespace ItemEvaluator
 					returnToMainMenu = true;
 					return new Vector2(0, 0);
 				}
-				else if (int.TryParse(smallHeightResponse, out int result) && MeasurementConverter.MaximumSmallHeight(MSP) >= result)
+				else if (DetermineIfValidSmallValue(smallHeightResponse, out smallHeight) && MeasurementConverter.MaximumSmallHeight(MSP) >= smallHeight)
 				{
-					validSmallHeight = true;
+					if (largeHeight == 0 && smallHeight == 0)
+						Console.WriteLine($"Invalid Reponse. Total Item height Cannot be 0. Please try again.");
+					else
+						validSmallHeight = true;
 				}
-				else if (largeHeight == 0 && result == 0)				
-					Console.WriteLine($"Invalid Response. Item Height cannot be 0. Please try again.");				
 				else
-					Console.WriteLine($"Invalid Response. Please try again.");
+					Console.WriteLine($"{invalidResponse}");
 			}
-			double smallHeight = Convert.ToDouble(smallHeightResponse);
 			Vector2 saveValueHeight = MeasurementConverter.SaveValueHeight(MSP, largeHeight, smallHeight);
 			Console.WriteLine($"Height set to {MeasurementConverter.DisplayValueHeight(MSP, saveValueHeight)}.\n");
 			return saveValueHeight;
@@ -270,13 +274,14 @@ namespace ItemEvaluator
 					return 0;
 				}
 				else
-					Console.WriteLine($"Invalid Response. Please try again.");
+					Console.WriteLine($"{invalidResponse}");
 			}
 			Console.WriteLine(
-				$"What Temperature is your item? Use only whole numbers.\n" +
+				$"What Temperature is your item in {TemperatureConverter.GetTemperatureName(nav.CurrentUser.TemperatureScalePref)}? It will be rounded to 2 decimal places.\n" +
 				returnToMainMenuOption);
 			bool hasValidTemperature = false;
 			string temperatureResponse = "";
+			double newTemperature = 0;
 			while (!hasValidTemperature)
 			{
 				temperatureResponse = Console.ReadLine().ToLower();
@@ -285,14 +290,13 @@ namespace ItemEvaluator
 					returnToMainMenu = true;
 					return 0;
 				}
-				else if (int.TryParse(temperatureResponse, out int result))
+				else if (DetermineIfValidSmallValue(temperatureResponse, out newTemperature))
 				{
 					hasValidTemperature = true;
 				}
 				else
-					Console.WriteLine($"Invalid Response. Please try again.");
+					Console.WriteLine($"{invalidResponse}");
 			}
-			double newTemperature = Convert.ToDouble(temperatureResponse);
 			double saveValueTemperature = TemperatureConverter.SaveValueTemperature(TSP, newTemperature);
 			Console.WriteLine($"Temperature set to {TemperatureConverter.DisplayValueTemperature(TSP, saveValueTemperature)}.\n");
 			return saveValueTemperature;
@@ -331,7 +335,7 @@ namespace ItemEvaluator
 					Console.WriteLine($"{firstItemTag} added to Item Tags.\n");
 				}
 				else
-					Console.WriteLine($"Invalid Response. Please try again.");
+					Console.WriteLine($"{invalidResponse}");
 			}
 			Console.WriteLine(
 					$"Your current Item Tags are: {DisplayItemTags(itemTagsList)}.\n" +
@@ -362,7 +366,7 @@ namespace ItemEvaluator
 					}					
 				}
 				else
-					Console.WriteLine($"Invalid Response. Please try again.");
+					Console.WriteLine($"{invalidResponse}");
 			}
 			Console.WriteLine();
 			return itemTagsList;
@@ -401,9 +405,20 @@ namespace ItemEvaluator
 					WriteColor($"Item Color set to [={color}]{color}[/].");
 				}
 				else
-					Console.WriteLine($"Invalid Response. Please try again.");
+					Console.WriteLine($"{invalidResponse}");
 			}			
 			return color;
 		}		
+
+		private bool DetermineIfValidSmallValue(string smallValue, out double newValue)
+		{
+			if (double.TryParse(smallValue, out newValue))
+			{
+				newValue = Math.Round(newValue, 2, MidpointRounding.AwayFromZero);		
+				return true;
+			}
+			else
+				return false;			
+		}
 	}
 }

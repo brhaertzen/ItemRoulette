@@ -12,6 +12,7 @@ namespace ItemEvaluator
 		protected const string lineBreak = "================================================================================";
 		protected const string quote = "\"";
 		protected string returnToMainMenuOption = $"Type {quote}Escape{quote} to return to Main Menu.";
+		protected string invalidResponse = $"Invalid Response. Please try again.";
 
 		public Menu(Navigator navigator)
 		{

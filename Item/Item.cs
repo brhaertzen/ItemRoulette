@@ -30,6 +30,11 @@ namespace ItemEvaluator
 			this.Temperature = temperature;
 			this.ItemTags = itemTags;
 			this.Color = color;
-		}		
+		}	
+		
+		public void AdjustUserWhoCreated(string newUserName)
+		{
+			this.UserWhoCreated = newUserName;
+		}
 	}
 }

@@ -202,6 +202,9 @@ namespace ItemEvaluator
 		private static string DisplayMetricHeight(Vector2 height)
 		{
 			string returnString;
+			double newX = Math.Round(height.x, 2, MidpointRounding.AwayFromZero);
+			double newY = Math.Round(height.y, 2, MidpointRounding.AwayFromZero);
+			height = new Vector2(newX, newY);
 			if (height.x == 0f)			
 				returnString = $"{height.y}cm";			
 			else if (height.y == 0f)			
@@ -214,6 +217,9 @@ namespace ItemEvaluator
 		private static string DisplayImperialHeight(Vector2 height)
 		{
 			string returnString;
+			double newX = Math.Round(height.x, 2, MidpointRounding.AwayFromZero);
+			double newY = Math.Round(height.y, 2, MidpointRounding.AwayFromZero);
+			height = new Vector2(newX, newY);
 			if (height.x == 0f)
 				returnString = $"{height.y}in";
 			else if (height.y == 0f)
@@ -226,6 +232,9 @@ namespace ItemEvaluator
 		private static string DisplayMetricWeight(Vector2 weight)
 		{
 			string returnString;
+			double newX = Math.Round(weight.x, 2, MidpointRounding.AwayFromZero);
+			double newY = Math.Round(weight.y, 2, MidpointRounding.AwayFromZero);
+			weight = new Vector2(newX, newY);
 			if (weight.x == 0f)
 				returnString = $"{weight.y}g";
 			else if (weight.y == 0f)
@@ -238,6 +247,9 @@ namespace ItemEvaluator
 		private static string DisplayImperialWeight(Vector2 weight)
 		{
 			string returnString;
+			double newX = Math.Round(weight.x, 2, MidpointRounding.AwayFromZero);
+			double newY = Math.Round(weight.y, 2, MidpointRounding.AwayFromZero);
+			weight = new Vector2(newX, newY);
 			if (weight.x == 0f)
 				returnString = $"{weight.y}oz";
 			else if (weight.y == 0f)

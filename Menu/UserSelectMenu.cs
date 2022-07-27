@@ -15,7 +15,9 @@ namespace ItemEvaluator
 		public override MenuState Enter()
 		{
 			MenuStateEnterText($"You are now in User Select.");
-			Console.WriteLine($"Please select a User by typing their name from the following list:");
+			Console.WriteLine(
+				$"Please select a User by typing their name from the following list:" +
+				$"{returnToMainMenuOption}");
 			Dictionary<string, User> nameDict = new Dictionary<string, User>();
 			foreach (var user in nav.UserList)
 			{
@@ -26,7 +28,9 @@ namespace ItemEvaluator
 			while (!validUserOption)
 			{
 				string userResponse = Console.ReadLine().ToLower();
-				if (nameDict.ContainsKey(userResponse))
+				if (userResponse == "escape")				
+					return MenuState.MainMenu;				
+				else if (nameDict.ContainsKey(userResponse))
 				{
 					validUserOption = true;
 					nameDict.TryGetValue(userResponse, out User nextSelectedUser);
@@ -38,7 +42,7 @@ namespace ItemEvaluator
 					Console.ReadKey();
 				}
 				else
-					Console.WriteLine($"Invalid Response. Please try again.");
+					Console.WriteLine($"{invalidResponse}");
 			}
 			return MenuState.MainMenu;
 		}

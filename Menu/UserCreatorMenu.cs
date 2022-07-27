@@ -116,7 +116,7 @@ namespace ItemEvaluator
 					validTemperatureResponse = true;
 				}
 				else
-					Console.WriteLine($"Invalid Temperature Scale. Please try again.");
+					Console.WriteLine($"{invalidResponse}");
 			}
 			return temperatureScale;
 		}
@@ -152,7 +152,7 @@ namespace ItemEvaluator
 					validMeasurementResponse = true;
 				}
 				else
-					Console.WriteLine($"Invalid Measurement System. Please try again.");
+					Console.WriteLine($"{invalidResponse}");
 			}
 			return measurementSystem;
 		}
@@ -233,7 +233,7 @@ namespace ItemEvaluator
 					validColorResponse = true;
 				}
 				else
-					Console.WriteLine($"Invalid Color. Please try again.");
+					Console.WriteLine($"{invalidResponse}");
 			}
 			return textColor;
 		}

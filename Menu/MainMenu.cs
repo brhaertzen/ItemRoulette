@@ -52,7 +52,7 @@ namespace ItemEvaluator
 				else if (menuResponse == "exit")
 					return MenuState.Exit;
 				else
-					Console.WriteLine("Invalid response. Please try again.");
+					Console.WriteLine($"{invalidResponse}");
 			}
 			return MenuState.MainMenu;
 		}

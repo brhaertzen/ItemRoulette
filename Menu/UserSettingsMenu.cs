@@ -43,7 +43,7 @@ namespace ItemEvaluator
 				else if (optionResponse == "color")				
 					AdjustTextColor();				
 				else
-					Console.WriteLine($"Invalid response. Please try again.\n");
+					Console.WriteLine($"{invalidResponse}\n");
 			}			
 			return MenuState.MainMenu;
 		}		
@@ -73,7 +73,9 @@ namespace ItemEvaluator
 				}
 			}
 			WriteColor($"New User Name set to [={nav.CurrentUser.ColorPref}]{nameResponse}[/].");
-			nav.CurrentUser.AdjustUserName(nameResponse);
+			nav.AdjustUserName(nameResponse);
+			nav.SaveUserList();
+			nav.SaveItemList();
 		}
 
 		private void AdjustTemperatureScale()
@@ -105,9 +107,10 @@ namespace ItemEvaluator
 					validTemperatureResponse = true;
 				}
 				else
-					Console.WriteLine($"Invalid Temperature Scale. Please try again.");
+					Console.WriteLine($"{invalidResponse}");
 			}
 			nav.CurrentUser.AdjustTemperatureScalePref(newTemperatureScale);
+			nav.SaveUserList();
 		}
 
 		private void AdjustMeasurementSystem()
@@ -133,9 +136,10 @@ namespace ItemEvaluator
 					validMeasurementResponse = true;
 				}
 				else
-					Console.WriteLine($"Invalid Measurement System. Please try again.");
+					Console.WriteLine($"{invalidResponse}");
 			}
 			nav.CurrentUser.AdjustMeasurementSystemPref(newMeasurementSystem);
+			nav.SaveUserList();
 		}
 
 		private void AdjustTextColor()
@@ -205,9 +209,10 @@ namespace ItemEvaluator
 					validColorResponse = true;
 				}
 				else
-					Console.WriteLine($"Invalid Color. Please try again.");
+					Console.WriteLine($"{invalidResponse}");
 			}
 			nav.CurrentUser.AdjustTextColorPref(newTextColor);
+			nav.SaveUserList();
 		}
 	}
 }
