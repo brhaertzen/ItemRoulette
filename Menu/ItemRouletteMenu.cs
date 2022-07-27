@@ -8,7 +8,7 @@ namespace ItemEvaluator
 {
 	public class ItemRouletteMenu : Menu
 	{
-		public ItemRouletteMenu()
+		public ItemRouletteMenu(Navigator navigator) : base(navigator)
 		{
 		}
 

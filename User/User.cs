@@ -12,17 +12,17 @@ namespace ItemEvaluator
 		public string Name { get; private set; }
 		public TemperatureScale TemperatureScalePref { get; private set; }
 		public MeasurementSystem MeasurementSystemPref { get; private set; }
-		public ConsoleColor TextColorPref { get; private set; }
+		public ConsoleColor ColorPref { get; private set; }
 		public int ItemsCreated { get; private set; }
 		public int EvaluatorTokens { get; private set; }
 
 		[JsonConstructor]
-		public User(String name, TemperatureScale temperatureScalePref, MeasurementSystem measurementSystemPref, ConsoleColor textColorPref, int itemsCreated, int evaluatorTokens)
+		public User(String name, TemperatureScale temperatureScalePref, MeasurementSystem measurementSystemPref, ConsoleColor colorPref, int itemsCreated, int evaluatorTokens)
 		{
 			this.Name = name;
 			this.TemperatureScalePref = temperatureScalePref;
 			this.MeasurementSystemPref = measurementSystemPref;
-			this.TextColorPref = textColorPref;
+			this.ColorPref = colorPref;
 			this.ItemsCreated = itemsCreated;
 			this.EvaluatorTokens = evaluatorTokens;
 		}
@@ -44,7 +44,7 @@ namespace ItemEvaluator
 
 		public void AdjustTextColorPref(ConsoleColor newTextColor)
 		{
-			TextColorPref = newTextColor;
+			ColorPref = newTextColor;
 		}
 
 		public int IncreaseItemsCreatedCount()

@@ -8,9 +8,20 @@ namespace ItemEvaluator
 {
 	public class Menu
 	{
+		protected Navigator nav;
 		protected const string lineBreak = "================================================================================";
 		protected const string quote = "\"";
 		protected string returnToMainMenuOption = $"Type {quote}Escape{quote} to return to Main Menu.";
+
+		public Menu(Navigator navigator)
+		{
+			this.nav = navigator;
+		}
+
+		public Menu()
+		{
+		}
+
 		public virtual MenuState Enter()
 		{
 			return MenuState.Start;
@@ -25,11 +36,22 @@ namespace ItemEvaluator
 				$"{enterStatement}\n");
 		}
 
-		protected void WriteColor(ConsoleColor color, string text)
+		protected void WriteColor(string message)
 		{
-			Console.ForegroundColor = color;
-			Console.Write(text);
-			Console.ForegroundColor = ConsoleColor.White;
+			string[] msgArray = message.Split('[', ']');
+			ConsoleColor color;
+			foreach (var msg in msgArray)
+			{
+				if (msg.StartsWith("/"))
+					Console.ResetColor();
+				else if (msg.StartsWith("=") && Enum.TryParse(msg.Substring(1), out color))
+				{
+					Console.ForegroundColor = color;
+				}					
+				else
+					Console.Write(msg);
+			}
+			Console.Write($"\n");
 		}
 
 		protected string DisplayItemTags(List<ItemTags> itemTagsList)
@@ -52,28 +74,6 @@ namespace ItemEvaluator
 				displayTags += $", & {itemTagsList[itemTagsList.Count - 1]}";
 			}
 			return displayTags;
-		}
-
-		protected string DisplayColorTags(List<ConsoleColor> colorTagsList)
-		{
-			string displayTags = "";
-			if (colorTagsList.Count == 1)
-				displayTags = $"{colorTagsList[0]}";
-			else if (colorTagsList.Count == 2)
-			{
-				displayTags = $"{colorTagsList[0]}";
-				displayTags += $" & {colorTagsList[1]}";
-			}
-			else if (colorTagsList.Count > 2)
-			{
-				displayTags = $"{colorTagsList[0]}";
-				for (int i = 1; i < colorTagsList.Count - 1; i++)
-				{
-					displayTags += $", {colorTagsList[i]}";
-				}
-				displayTags += $", & {colorTagsList[colorTagsList.Count - 1]}";
-			}
-			return displayTags;
-		}
+		}		
 	}
 }

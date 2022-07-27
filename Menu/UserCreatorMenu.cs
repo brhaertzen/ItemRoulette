@@ -8,15 +8,11 @@ namespace ItemEvaluator
 {
 	public class UserCreatorMenu : Menu
 	{
-		private List<User> userList = new List<User>();
-		private Navigator navigator;
 		private bool canGoToMainMenu;
 
-		public UserCreatorMenu(Navigator navigator, List<User> userList)
+		public UserCreatorMenu(Navigator navigator) : base(navigator)
 		{
-			this.navigator = navigator;
-			this.userList = userList;
-			this.canGoToMainMenu = userList.Count > 0;
+			this.canGoToMainMenu = nav.UserList.Count > 0;
 		}
 
 		public override MenuState Enter()
@@ -35,14 +31,15 @@ namespace ItemEvaluator
 			if (returnToMainMenu)
 				return MenuState.MainMenu;
 			User newUser = new User(newName, newTemperatureScale, newMeasurementSystem, newTextColor, 0, 0);
-			userList.Add(newUser);
-			navigator.UpdateUserAndUserList(userList, newUser);
-			Console.WriteLine(
+			nav.UserList.Add(newUser);
+			nav.SaveUserList();
+			nav.CurrentUser = newUser;
+			WriteColor(
 				$"\n" +
-				$"New User {newName} has been created!\n" +
+				$"New User [={newTextColor}]{newName}[/] has been created!\n" +
 				$"Temperature Scale Preference: {newTemperatureScale}.\n" +
 				$"Measurement System Preference: {newMeasurementSystem}.\n" +
-				$"Text Color Preference: {newTextColor}.\n" +
+				$"Text Color Preference: [={newTextColor}]{newTextColor}[/].\n" +
 				$"Press any key to return to Main Menu.");
 			Console.ReadKey();			
 			return MenuState.MainMenu;
@@ -65,9 +62,9 @@ namespace ItemEvaluator
 					returnToMainMenu = true;
 					return null;
 				}
-				if (userList.Count == 0)
+				if (nav.UserList.Count == 0)
 					break;
-				foreach (var user in userList)
+				foreach (var user in nav.UserList)
 				{
 					validName = true;
 					if (user.Name.ToLower() == nameResponseLower)
@@ -166,14 +163,15 @@ namespace ItemEvaluator
 			Console.WriteLine(
 				$"\n" +
 				$"Please enter your preferred Text Color among these options:");
-			WriteColor(ConsoleColor.Red, $"{quote}Red{quote}");
-			WriteColor(ConsoleColor.Yellow, $"{quote}Yellow{quote}");
-			WriteColor(ConsoleColor.Green, $"{quote}Green{quote}");
-			WriteColor(ConsoleColor.Blue, $"{quote}Blue{quote}");
-			WriteColor(ConsoleColor.Cyan, $"{quote}Cyan{quote}");
-			WriteColor(ConsoleColor.Magenta, $"{quote}Magenta{quote}");
-			WriteColor(ConsoleColor.Gray, $"{quote}Gray{quote}");
-			WriteColor(ConsoleColor.White, $"{quote}White{quote}");
+			WriteColor(
+				$"{quote}[={ConsoleColor.Red}]Red[/]{quote}, " +
+				$"{quote}[={ConsoleColor.Yellow}]Yellow[/]{quote}, " +
+				$"{quote}[={ConsoleColor.Green}]Green[/]{quote}, " +
+				$"{quote}[={ConsoleColor.Blue}]Blue[/]{quote}, " +
+				$"{quote}[={ConsoleColor.Cyan}]Cyan[/]{quote}, " +
+				$"{quote}[={ConsoleColor.Magenta}]Magenta[/]{quote}, " +
+				$"{quote}[={ConsoleColor.Gray}]Gray[/]{quote}, " +
+				$"& {quote}[={ConsoleColor.White}]White[/]{quote}.");
 			if (canGoToMainMenu)
 				Console.WriteLine(returnToMainMenuOption);
 			bool validColorResponse = false;
@@ -188,49 +186,49 @@ namespace ItemEvaluator
 				}
 				else if (colorResponse == "red")
 				{
-					Console.WriteLine("Text Color Preference set to Red.");
+					WriteColor($"Text Color Preference set to [={ConsoleColor.Red}]Red[/].");
 					textColor = ConsoleColor.Red;
 					validColorResponse = true;
 				}
 				else if (colorResponse == "yellow")
 				{
-					Console.WriteLine("Text Color Preference set to Yellow.");
+					WriteColor($"Text Color Preference set to [={ConsoleColor.Yellow}]Yellow[/].");
 					textColor = ConsoleColor.Yellow;
 					validColorResponse = true;
 				}
 				else if (colorResponse == "green")
 				{
-					Console.WriteLine("Text Color Preference set to Green.");
+					WriteColor($"Text Color Preference set to [={ConsoleColor.Green}]Green[/].");
 					textColor = ConsoleColor.Green;
 					validColorResponse = true;
 				}
 				else if (colorResponse == "blue")
 				{
-					Console.WriteLine("Text Color Preference set to Blue.");
+					WriteColor($"Text Color Preference set to [={ConsoleColor.Blue}]Blue[/].");
 					textColor = ConsoleColor.Blue;
 					validColorResponse = true;
 				}
 				else if (colorResponse == "cyan")
 				{
-					Console.WriteLine("Text Color Preference set to Cyan.");
+					WriteColor($"Text Color Preference set to [={ConsoleColor.Cyan}]Cyan[/].");
 					textColor = ConsoleColor.Cyan;
 					validColorResponse = true;
 				}
 				else if (colorResponse == "magenta")
 				{
-					Console.WriteLine("Text Color Preference set to Magenta.");
+					WriteColor($"Text Color Preference set to [={ConsoleColor.Magenta}]Magenta[/].");
 					textColor = ConsoleColor.Magenta;
 					validColorResponse = true;
 				}
 				else if (colorResponse == "gray")
 				{
-					Console.WriteLine("Text Color Preference set to Gray.");
+					WriteColor($"Text Color Preference set to [={ConsoleColor.Gray}]Gray[/].");
 					textColor = ConsoleColor.Gray;
 					validColorResponse = true;
 				}
 				else if (colorResponse == "white")
 				{
-					Console.WriteLine("Text Color Preference set to White.");
+					WriteColor($"Text Color Preference set to [={ConsoleColor.White}]White[/].");
 					textColor = ConsoleColor.White;
 					validColorResponse = true;
 				}

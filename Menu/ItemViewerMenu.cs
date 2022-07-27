@@ -8,24 +8,15 @@ namespace ItemEvaluator
 {
 	public class ItemViewerMenu : Menu
 	{
-		private Navigator navigator;
-		private List<Item> itemList;
-		private List<User> userList;
-		private User currentUser;
-
-		public ItemViewerMenu(Navigator navigator, List<Item> itemList, List<User> userList, User currentUser)
+		public ItemViewerMenu(Navigator navigator) : base(navigator)
 		{
-			this.navigator = navigator;
-			this.itemList = itemList;
-			this.userList = userList;
-			this.currentUser = currentUser;
 		}
 
 		public override MenuState Enter()
 		{
 			MenuStateEnterText($"You are now in your Item Viewer.");
 			Console.WriteLine(
-				$"You have {currentUser.StateItemsCreated()}. Type {quote}List{quote} to see all your items.\n" +
+				$"You have {nav.CurrentUser.StateItemsCreated()}. Type {quote}List{quote} to see all your items.\n" +
 				returnToMainMenuOption);
 			bool keepLookingAtItems = true;
 			while (keepLookingAtItems)
@@ -48,10 +39,10 @@ namespace ItemEvaluator
 		{
 			Console.WriteLine();
 			Dictionary<string, Item> itemStringDict = new Dictionary<string, Item>();
-			foreach (var item in itemList)			
-				if (item.UserWhoCreated.Name == currentUser.Name)
+			foreach (var item in nav.ItemList)			
+				if (item.UserWhoCreated == nav.CurrentUser.Name)
 				{
-					Console.WriteLine($"{item.Name}");
+					WriteColor($"[={item.Color}]{item.Name}[/]");
 					itemStringDict.Add(item.Name.ToLower(), item);
 				}
 			Console.WriteLine(
@@ -66,16 +57,16 @@ namespace ItemEvaluator
 				else if (itemStringDict.ContainsKey(listResponse))
 				{
 					itemStringDict.TryGetValue(listResponse, out Item itemRequest);
-					Console.WriteLine(
+					WriteColor(
 						$"\n" +
-						$"Here are the properties of Item: {itemRequest.Name}.\n" +
+						$"Here are the properties of Item: [={itemRequest.Color}]{itemRequest.Name}[/].\n" +
 						$"Name: {itemRequest.Name}\n" +
-						$"User who Created: {itemRequest.UserWhoCreated.Name}\n" +
-						$"Weight: {MeasurementConverter.DisplayValueWeight(currentUser.MeasurementSystemPref, itemRequest.Weight)}\n" +
-						$"Height: {MeasurementConverter.DisplayValueHeight(currentUser.MeasurementSystemPref, itemRequest.Height)}\n" +
+						$"User who Created: {itemRequest.UserWhoCreated}\n" +
+						$"Weight: {MeasurementConverter.DisplayValueWeight(nav.CurrentUser.MeasurementSystemPref, itemRequest.Weight)}\n" +
+						$"Height: {MeasurementConverter.DisplayValueHeight(nav.CurrentUser.MeasurementSystemPref, itemRequest.Height)}\n" +
 						$"{TemperatureResponse(itemRequest)}\n" +
 						$"Item Tags: {DisplayItemTags(itemRequest.ItemTags)}\n" +
-						$"Color Tags: {DisplayColorTags(itemRequest.ColorTags)}\n" +
+						$"Color: [={itemRequest.Color}]{itemRequest.Color}[/]\n" +
 						$"Type the name of another item if you would like to see its properties.\n" +
 						$"{returnToMainMenuOption}");
 				}
@@ -88,7 +79,7 @@ namespace ItemEvaluator
 		{
 			string response = "";
 			if (item.HasTemperature)			
-				response = $"Temperature: {TemperatureConverter.DisplayValueTemperature(currentUser.TemperatureScalePref, item.Temperature)}";			
+				response = $"Temperature: {TemperatureConverter.DisplayValueTemperature(nav.CurrentUser.TemperatureScalePref, item.Temperature)}";			
 			else
 				response = $"Item has no temperature data";
 			return response;

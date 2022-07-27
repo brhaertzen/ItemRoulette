@@ -10,17 +10,17 @@ namespace ItemEvaluator
 	public class Item
 	{
 		public string Name { get; private set; }
-		public User UserWhoCreated { get; private set; }
+		public string UserWhoCreated { get; private set; }
 		public Vector2 Weight { get; private set; }
 		public Vector2 Height { get; private set; }
 		public bool HasTemperature { get; private set; } = false;
 		public double Temperature { get; private set; }
 		public List<ItemTags> ItemTags { get; private set; }
-		public List<ConsoleColor> ColorTags { get; private set; }
+		public ConsoleColor Color { get; private set; }
 				
 		[JsonConstructor]
-		public Item(string name, User userWhoCreated, Vector2 weight, Vector2 height, bool hasTemperature,
-			double temperature, List<ItemTags> itemTags, List<ConsoleColor> colorTags)
+		public Item(string name, string userWhoCreated, Vector2 weight, Vector2 height, bool hasTemperature,
+			double temperature, List<ItemTags> itemTags, ConsoleColor color)
 		{
 			this.Name = name;
 			this.UserWhoCreated = userWhoCreated;
@@ -29,7 +29,7 @@ namespace ItemEvaluator
 			this.HasTemperature = hasTemperature;
 			this.Temperature = temperature;
 			this.ItemTags = itemTags;
-			this.ColorTags = colorTags;
+			this.Color = color;
 		}		
 	}
 }

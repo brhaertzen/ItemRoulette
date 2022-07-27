@@ -8,10 +8,6 @@ namespace ItemEvaluator
 {
 	public class ItemCreatorMenu : Menu
 	{
-		private Navigator navigator;
-		private List<Item> itemList;
-		private List<User> userList;
-		private User currentUser;
 		private MeasurementSystem MSP;
 		private TemperatureScale TSP;
 		private string displayItemTags =
@@ -24,18 +20,14 @@ namespace ItemEvaluator
 			$"{(ItemTags)31} {(ItemTags)32} {(ItemTags)33} {(ItemTags)34} {(ItemTags)35}\n" +
 			$"{(ItemTags)36} {(ItemTags)37} {(ItemTags)38} {(ItemTags)39} {(ItemTags)40}\n" +
 			$"{(ItemTags)41} {(ItemTags)42} {(ItemTags)43} {(ItemTags)44} {(ItemTags)45}";
-		private string displayColorTags =
-			$"{ConsoleColor.Red} {ConsoleColor.Yellow} {ConsoleColor.Green} {ConsoleColor.Blue}\n" +
-			$"{ConsoleColor.Cyan} {ConsoleColor.Magenta} {ConsoleColor.Gray} {ConsoleColor.White}";
+		private string displayColors =
+			$"[={ConsoleColor.Red}]{ConsoleColor.Red}[/] [={ConsoleColor.Yellow}]{ConsoleColor.Yellow}[/] [={ConsoleColor.Green}]{ConsoleColor.Green}[/] [={ConsoleColor.Blue}]{ConsoleColor.Blue}[/]\n" +
+			$"[={ConsoleColor.Cyan}]{ConsoleColor.Cyan}[/] [={ConsoleColor.Magenta}]{ConsoleColor.Magenta}[/] [={ConsoleColor.Gray}]{ConsoleColor.Gray}[/] [={ConsoleColor.White}]{ConsoleColor.White}[/]";
 
-		public ItemCreatorMenu(Navigator navigator, List<Item> itemList,List<User> userList, User currentUser)
+		public ItemCreatorMenu(Navigator navigator) : base(navigator)
 		{
-			this.navigator = navigator;
-			this.itemList = itemList;
-			this.userList = userList;
-			this.currentUser = currentUser;
-			MSP = currentUser.MeasurementSystemPref;
-			TSP = currentUser.TemperatureScalePref;
+			MSP = nav.CurrentUser.MeasurementSystemPref;
+			TSP = nav.CurrentUser.TemperatureScalePref;
 		}
 
 		public override MenuState Enter()
@@ -48,8 +40,8 @@ namespace ItemEvaluator
 			{
 				CreateItem(out keepCreatingItems);
 			}			
-			navigator.UpdateItemList(itemList);
-			navigator.UpdateUserAndUserList(userList, currentUser);
+			nav.SaveItemList();
+			nav.SaveUserList();
 			return MenuState.MainMenu;
 		}
 
@@ -71,16 +63,16 @@ namespace ItemEvaluator
 			List<ItemTags> newItemTags = GetItemTags(out returnToMainMenu);
 			if (returnToMainMenu)
 				return;
-			List<ConsoleColor> newColorTags = GetColorTags(out returnToMainMenu);
+			ConsoleColor newColor = GetColor(out returnToMainMenu);
 			if (returnToMainMenu)
 				return;
-			Item newItem = new Item(newItemName, currentUser, newItemWeight, newItemHeight, newItemHasTemperature, newItemTemperature, newItemTags, newColorTags);			
-			itemList.Add(newItem);
-			currentUser.IncreaseItemsCreatedCount();
-			currentUser.GiveEvaluatorToken(1);
-			Console.WriteLine(
-				$"New Item {newItem.Name} added to Item Evaluator.\n" +
-				$"You have earned 1 Evaluator Token and now have {currentUser.StateEvaluatorTokens()}.\n" +
+			Item newItem = new Item(newItemName, nav.CurrentUser.Name, newItemWeight, newItemHeight, newItemHasTemperature, newItemTemperature, newItemTags, newColor);			
+			nav.ItemList.Add(newItem);
+			nav.CurrentUser.IncreaseItemsCreatedCount();
+			nav.CurrentUser.GiveEvaluatorToken(1);
+			WriteColor(
+				$"New Item [={newItem.Color}]{newItem.Name}[/] added to Item Evaluator.\n" +
+				$"You have earned 1 Evaluator Token and now have {nav.CurrentUser.StateEvaluatorTokens()}.\n" +
 				$"Type {quote}Item{quote} to create another Item.\n" +
 				returnToMainMenuOption);
 			bool validResponse = false;
@@ -106,7 +98,7 @@ namespace ItemEvaluator
 		{
 			returnToMainMenu = false;
 			List<string> itemNameList = new List<string>();
-			foreach (var item in this.itemList)
+			foreach (var item in nav.ItemList)
 			{
 				itemNameList.Add(item.Name.ToLower());
 			}
@@ -124,11 +116,11 @@ namespace ItemEvaluator
 					returnToMainMenu = true;
 					return "";
 				}
-				else if (itemList.Count == 0)				
+				else if (nav.ItemList.Count == 0)				
 					validItemName = true;				
 				else
 				{
-					foreach (var item in this.itemList)
+					foreach (var item in nav.ItemList)
 					{
 						validItemName = true;
 						if (item.Name.ToLower() == itemNameResponseLower)
@@ -376,71 +368,42 @@ namespace ItemEvaluator
 			return itemTagsList;
 		}
 
-		private List<ConsoleColor> GetColorTags(out bool returnToMainMenu)
+		private ConsoleColor GetColor(out bool returnToMainMenu)
 		{
 			returnToMainMenu = false;
-			Console.WriteLine(
-				$"Add some Colors to your item! Here is the list of all available Colors. You can add up to 2.\n" +
-				$"{displayColorTags}\n" +
+			WriteColor(
+				$"What Color is your item? Here is the list of available colors: \n" +
+				$"{displayColors}\n" +
 				returnToMainMenuOption);
-			bool hasValidFirstColorTagResponse = false;
-			List<ConsoleColor> colorTagsList = new List<ConsoleColor>();
-			Dictionary<string, ConsoleColor> colorTagStringsDict = new Dictionary<string, ConsoleColor>();
-			colorTagStringsDict.Add("red", ConsoleColor.Red);
-			colorTagStringsDict.Add("yellow", ConsoleColor.Yellow);
-			colorTagStringsDict.Add("green", ConsoleColor.Green);
-			colorTagStringsDict.Add("blue", ConsoleColor.Blue);
-			colorTagStringsDict.Add("cyan", ConsoleColor.Cyan);
-			colorTagStringsDict.Add("magenta", ConsoleColor.Magenta);
-			colorTagStringsDict.Add("gray", ConsoleColor.Gray);
-			colorTagStringsDict.Add("white", ConsoleColor.White);
-			while (!hasValidFirstColorTagResponse)
+			bool hasValidColorResponse = false;
+			ConsoleColor color = ConsoleColor.White;
+			Dictionary<string, ConsoleColor> colorStringsDict = new Dictionary<string, ConsoleColor>();
+			colorStringsDict.Add("red", ConsoleColor.Red);
+			colorStringsDict.Add("yellow", ConsoleColor.Yellow);
+			colorStringsDict.Add("green", ConsoleColor.Green);
+			colorStringsDict.Add("blue", ConsoleColor.Blue);
+			colorStringsDict.Add("cyan", ConsoleColor.Cyan);
+			colorStringsDict.Add("magenta", ConsoleColor.Magenta);
+			colorStringsDict.Add("gray", ConsoleColor.Gray);
+			colorStringsDict.Add("white", ConsoleColor.White);
+			while (!hasValidColorResponse)
 			{
-				string firstColorResponse = Console.ReadLine().ToLower();
-				if (firstColorResponse == "escape")
+				string colorResponse = Console.ReadLine().ToLower();
+				if (colorResponse == "escape")
 				{
 					returnToMainMenu = true;
-					return new List<ConsoleColor>();
+					return color;
 				}
-				else if (colorTagStringsDict.ContainsKey(firstColorResponse))
+				else if (colorStringsDict.ContainsKey(colorResponse))
 				{
-					hasValidFirstColorTagResponse = true;
-					colorTagStringsDict.TryGetValue(firstColorResponse, out ConsoleColor firstColorTag);
-					colorTagsList.Add(firstColorTag);
-					Console.WriteLine($"{firstColorTag} added to Item Colors.\n");
+					hasValidColorResponse = true;
+					colorStringsDict.TryGetValue(colorResponse, out color);
+					WriteColor($"Item Color set to [={color}]{color}[/].");
 				}
 				else
 					Console.WriteLine($"Invalid Response. Please try again.");
-			}
-			Console.WriteLine(
-				$"You can add one more color to your item.\n" +
-				$"Or type {quote}Done{quote} if you are done adding colors.\n" +
-				returnToMainMenuOption);
-			bool hasValidSecondColorTagResponse = false;
-			while (!hasValidSecondColorTagResponse)
-			{
-				string secondColorResponse = Console.ReadLine().ToLower();
-				if (secondColorResponse == "escape")
-				{
-					returnToMainMenu = true;
-					return new List<ConsoleColor>();
-				}
-				else if (secondColorResponse == "done")				
-					return colorTagsList;				
-				else if (colorTagStringsDict.ContainsKey(secondColorResponse))
-				{
-					hasValidSecondColorTagResponse = true;
-					colorTagStringsDict.TryGetValue(secondColorResponse, out ConsoleColor secondColorTag);
-					if (colorTagsList.Contains(secondColorTag))					
-						Console.WriteLine($"{secondColorTag} already added to Item Colors. Please try again.");					
-					else
-					{
-						colorTagsList.Add(secondColorTag);
-						Console.WriteLine($"{secondColorTag} added to Item Colors. Your current Items Colors are {DisplayColorTags(colorTagsList)}.\n");
-					}
-				}
-			}
-			return colorTagsList;
+			}			
+			return color;
 		}		
 	}
 }

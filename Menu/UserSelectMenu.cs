@@ -8,15 +8,8 @@ namespace ItemEvaluator
 {
 	public class UserSelectMenu : Menu
 	{
-		private Navigator navigator;
-		private List<User> userList;
-		private User currentUser;
-
-		public UserSelectMenu(Navigator navigator, List<User> userList, User currentUser)
+		public UserSelectMenu(Navigator navigator) : base(navigator)
 		{
-			this.navigator = navigator;
-			this.userList = userList;
-			this.currentUser = currentUser;
 		}
 
 		public override MenuState Enter()
@@ -24,10 +17,10 @@ namespace ItemEvaluator
 			MenuStateEnterText($"You are now in User Select.");
 			Console.WriteLine($"Please select a User by typing their name from the following list:");
 			Dictionary<string, User> nameDict = new Dictionary<string, User>();
-			foreach (var user in userList)
+			foreach (var user in nav.UserList)
 			{
 				nameDict.Add(user.Name.ToLower(), user);
-				Console.WriteLine($"{quote}{user.Name}{quote}");
+				WriteColor($"{quote}[={user.ColorPref}]{user.Name}[/]{quote}");
 			}
 			bool validUserOption = false;
 			while (!validUserOption)
@@ -37,11 +30,10 @@ namespace ItemEvaluator
 				{
 					validUserOption = true;
 					nameDict.TryGetValue(userResponse, out User nextSelectedUser);
-					currentUser = nextSelectedUser;
-					navigator.UpdateUserAndUserList(userList, currentUser);
-					Console.WriteLine(
+					nav.CurrentUser = nextSelectedUser;
+					WriteColor(
 						$"\n" +
-						$"User set to {currentUser.Name}\n" +
+						$"User set to [={nav.CurrentUser.ColorPref}]{nav.CurrentUser.Name}[/].\n" +
 						$"Press any key to return to Main Menu.");
 					Console.ReadKey();
 				}

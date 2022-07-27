@@ -10,11 +10,15 @@ namespace ItemEvaluator
 {	
 	public class Navigator : Menu
 	{				
-		public User CurrentUser { get; private set; }
-		public List<User> UserList { get; private set; } = new List<User>();
-		public List<Item> ItemList { get; private set; } = new List<Item>();
+		public User CurrentUser { get; set; }
+		public List<User> UserList { get; set; } = new List<User>();
+		public List<Item> ItemList { get; set; } = new List<Item>();
 		private string userListFilePath => Directory.GetCurrentDirectory() + @"\Data\UserList.json";
 		private string itemListFilePath => Directory.GetCurrentDirectory() + @"\Data\ItemList.json";
+
+		public Navigator()
+		{
+		}
 
 		public void EnterNavigator()
 		{
@@ -23,17 +27,16 @@ namespace ItemEvaluator
 			Navigate();
 		}
 
-		public void UpdateUserAndUserList(List<User> userList, User user)
+		public void SaveItemList()
 		{
-			this.UserList = userList;
-			this.CurrentUser = user;
-			SaveUserList();
+			var itemJson = JsonConvert.SerializeObject(ItemList, Formatting.Indented);
+			File.WriteAllText(itemListFilePath, itemJson);
 		}
 
-		public void UpdateItemList(List<Item> itemList)
+		public void SaveUserList()
 		{
-			this.ItemList = itemList;
-			SaveItemList();
+			var userJson = JsonConvert.SerializeObject(UserList, Formatting.Indented);
+			File.WriteAllText(userListFilePath, userJson);
 		}
 
 		private void Navigate()
@@ -71,14 +74,14 @@ namespace ItemEvaluator
 			foreach (var user in UserList)
 			{
 				nameDict.Add(user.Name.ToLower(), user);
-				Console.WriteLine($"{quote}{user.Name}{quote}");
+				WriteColor($"{quote}[={user.ColorPref}]{user.Name}[/]{quote}");
 			}				
-			Console.WriteLine($"Or type {quote}New User{quote} to create a new user.");
+			Console.WriteLine($"Or type {quote}New{quote} to create a New User.");
 			bool validUserOption = false;
 			while (!validUserOption)
 			{
 				string userResponse = Console.ReadLine().ToLower();
-				if (userResponse == "new user")
+				if (userResponse == "new")
 				{
 					validUserOption = true;
 					return MenuState.UserCreator;
@@ -88,7 +91,7 @@ namespace ItemEvaluator
 					validUserOption = true;
 					nameDict.TryGetValue(userResponse, out User nextSelectedUser);
 					CurrentUser = nextSelectedUser;
-					Console.WriteLine($"User set to {CurrentUser.Name}");
+					WriteColor($"User set to [={CurrentUser.ColorPref}]{CurrentUser.Name}[/].");
 					return MenuState.MainMenu;
 				}
 				else
@@ -99,64 +102,52 @@ namespace ItemEvaluator
 
 		private MenuState EnterMainMenu()
 		{
-			MainMenu mainMenu = new MainMenu(UserList, CurrentUser);
+			MainMenu mainMenu = new MainMenu(this);
 			MenuState nextMenuState = mainMenu.Enter();
 			return nextMenuState;
 		}
 
 		private MenuState EnterItemCreator()
 		{			
-			ItemCreatorMenu itemCreator = new ItemCreatorMenu(this, ItemList, UserList, CurrentUser);
+			ItemCreatorMenu itemCreator = new ItemCreatorMenu(this);
 			MenuState nextMenuState =  itemCreator.Enter();
 			return nextMenuState;
 		}
 
 		private MenuState EnterItemViewer()
 		{
-			ItemViewerMenu itemViewer = new ItemViewerMenu(this, ItemList, UserList, CurrentUser);
+			ItemViewerMenu itemViewer = new ItemViewerMenu(this);
 			MenuState nextMenuState = itemViewer.Enter();
 			return nextMenuState;
 		}
 
 		private MenuState EnterItemRoulette()
 		{
-			ItemRouletteMenu itemRouletteMenu = new ItemRouletteMenu();
+			ItemRouletteMenu itemRouletteMenu = new ItemRouletteMenu(this);
 			MenuState nextMenuState = itemRouletteMenu.Enter();
 			return nextMenuState;
 		}
 
 		private MenuState EnterUserSelector()
 		{
-			UserSelectMenu userSelectorMenu = new UserSelectMenu(this, UserList, CurrentUser);
+			UserSelectMenu userSelectorMenu = new UserSelectMenu(this);
 			MenuState nextMenuState = userSelectorMenu.Enter();
 			return nextMenuState;
 		}
 
 		private MenuState EnterUserCreator()
 		{			
-			UserCreatorMenu userCreator = new UserCreatorMenu(this, UserList);
+			UserCreatorMenu userCreator = new UserCreatorMenu(this);
 			MenuState nextMenuState = userCreator.Enter();
 			return nextMenuState;
 		}
 
 		private MenuState EnterUserSettings()
 		{			
-			UserSettingsMenu userSettingsMenu = new UserSettingsMenu(this, UserList, CurrentUser);
+			UserSettingsMenu userSettingsMenu = new UserSettingsMenu(this);
 			MenuState nextMenuState = userSettingsMenu.Enter();
 			return nextMenuState;
-		}		
-		
-		private void SaveItemList()
-		{
-			var itemJson = JsonConvert.SerializeObject(ItemList, Formatting.Indented);
-			File.WriteAllText(itemListFilePath, itemJson);			
-		}
-
-		private void SaveUserList()
-		{
-			var userJson = JsonConvert.SerializeObject(UserList, Formatting.Indented);
-			File.WriteAllText(userListFilePath, userJson);
-		}
+		}			
 
 		private void LoadItemList()
 		{
@@ -166,20 +157,6 @@ namespace ItemEvaluator
 		private void LoadUserList()
 		{
 			UserList = JsonConvert.DeserializeObject<List<User>>(File.ReadAllText(userListFilePath));
-		}
-
-		private string ItemEvaluatorPath()
-		{			
-			string location = Directory.GetCurrentDirectory();
-			//location = Path.GetDirectoryName(location);
-			//location = Path.GetDirectoryName(location);
-			//location = Path.GetDirectoryName(location);
-			//string location = System.AppDomain.CurrentDomain.BaseDirectory;
-			//string location = System.Reflection.Assembly.GetEntryAssembly().Location;
-			//string location = Path.GetDirectoryName(file);
-			//string location = Environment.CurrentDirectory;
-			//string location = AppDomain.CurrentDomain.BaseDirectory;
-			return location;
-		}
+		}		
 	}
 }
