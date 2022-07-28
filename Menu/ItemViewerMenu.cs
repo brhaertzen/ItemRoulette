@@ -58,15 +58,16 @@ namespace ItemRoulette
 						if (itemStringDict.ContainsKey(listResponse))
 						{
 							itemStringDict.TryGetValue(listResponse, out Item itemRequest);
+							User user = nav.GetUserByString(itemRequest.UserWhoCreated);
 							WriteColor(
 								$"\n" +
 								$"Here are the properties of Item: [={itemRequest.Color}]{itemRequest.Name}[/].\n" +
-								$"Name: {itemRequest.Name}\n" +
-								$"User who Created: {itemRequest.UserWhoCreated}\n" +
+								$"Name: [={itemRequest.Color}]{itemRequest.Name}[/]\n" +
+								$"User who Created: [={user.ColorPref}]{user.Name}[/]\n" +
 								$"Weight: {MeasurementConverter.DisplayValueWeight(nav.CurrentUser.MeasurementSystemPref, itemRequest.Weight)}\n" +
 								$"Height: {MeasurementConverter.DisplayValueHeight(nav.CurrentUser.MeasurementSystemPref, itemRequest.Height)}\n" +
 								$"{TemperatureResponse(itemRequest)}\n" +
-								$"Item Tags: {DisplayItemTags(itemRequest.ItemTags)}\n" +
+								$"Item Tags: {StateItemTags(itemRequest.ItemTags)}\n" +
 								$"Color: [={itemRequest.Color}]{itemRequest.Color}[/]\n" +
 								$"Type the name of another item if you would like to see its properties.\n" +
 								$"{returnToMainMenuOption}");

@@ -3,8 +3,16 @@
     "Name": "Brad",
     "TemperatureScalePref": 0,
     "MeasurementSystemPref": 1,
-    "ColorPref": 12,
-    "ItemsCreated": 6,
-    "EvaluatorTokens": 6
+    "ColorPref": 13,
+    "ItemsCreated": 10,
+    "RouletteCredit": 88
+  },
+  {
+    "Name": "Kyle",
+    "TemperatureScalePref": 1,
+    "MeasurementSystemPref": 0,
+    "ColorPref": 11,
+    "ItemsCreated": 2,
+    "RouletteCredit": 1
   }
 ]

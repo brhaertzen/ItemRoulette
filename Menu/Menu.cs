@@ -11,8 +11,8 @@ namespace ItemRoulette
 		protected Navigator nav;
 		protected const string lineBreak = "================================================================================";
 		protected const string quote = "\"";
-		protected string returnToMainMenuOption = $"Type {quote}Escape{quote} to return to Main Menu.";
-		protected string invalidResponse = $"Invalid Response. Please try again.";
+		protected const string invalidResponse = "Invalid Response. Please try again.";
+		protected string returnToMainMenuOption = $"Type {quote}Escape{quote} to return to Main Menu.";		
 
 		public Menu(Navigator navigator)
 		{
@@ -52,7 +52,7 @@ namespace ItemRoulette
 			Console.Write($"\n");
 		}
 
-		protected string DisplayItemTags(List<ItemTags> itemTagsList)
+		protected string StateItemTags(List<ItemTags> itemTagsList)
 		{
 			string displayTags = "";
 			switch (itemTagsList.Count)

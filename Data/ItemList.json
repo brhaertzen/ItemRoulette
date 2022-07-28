@@ -1,10 +1,97 @@
 [
   {
-    "Name": "Banana",
+    "Name": "Solo Cup",
     "UserWhoCreated": "Brad",
     "Weight": {
       "x": 0.0,
-      "y": 5.0
+      "y": 0.3
+    },
+    "Height": {
+      "x": 0.0,
+      "y": 4.0
+    },
+    "HasTemperature": false,
+    "Temperature": 0.0,
+    "ItemTags": [
+      11,
+      42,
+      24,
+      18
+    ],
+    "Color": 12
+  },
+  {
+    "Name": "Cell Phone",
+    "UserWhoCreated": "Brad",
+    "Weight": {
+      "x": 0.0,
+      "y": 5.7
+    },
+    "Height": {
+      "x": 0.0,
+      "y": 4.0
+    },
+    "HasTemperature": false,
+    "Temperature": 0.0,
+    "ItemTags": [
+      1,
+      8,
+      12,
+      18,
+      24,
+      43
+    ],
+    "Color": 7
+  },
+  {
+    "Name": "Blue Whale",
+    "UserWhoCreated": "Brad",
+    "Weight": {
+      "x": 300000.0,
+      "y": 0.0
+    },
+    "Height": {
+      "x": 75.0,
+      "y": 0.0
+    },
+    "HasTemperature": false,
+    "Temperature": 0.0,
+    "ItemTags": [
+      3,
+      13,
+      22,
+      31,
+      32
+    ],
+    "Color": 9
+  },
+  {
+    "Name": "Golf Ball",
+    "UserWhoCreated": "Brad",
+    "Weight": {
+      "x": 0.0,
+      "y": 1.6
+    },
+    "Height": {
+      "x": 0.0,
+      "y": 1.68
+    },
+    "HasTemperature": false,
+    "Temperature": 0.0,
+    "ItemTags": [
+      1,
+      9,
+      18,
+      24
+    ],
+    "Color": 15
+  },
+  {
+    "Name": "Banana",
+    "UserWhoCreated": "Brad",
+    "Weight": {
+      "x": 1.0,
+      "y": 0.0
     },
     "Height": {
       "x": 0.0,
@@ -14,61 +101,23 @@
     "Temperature": 0.0,
     "ItemTags": [
       3,
-      19,
+      14,
+      11,
       17,
+      19,
+      22,
+      27,
+      28,
       42
     ],
     "Color": 14
-  },
-  {
-    "Name": "Cell Phone",
-    "UserWhoCreated": "Brad",
-    "Weight": {
-      "x": 0.0,
-      "y": 4.0
-    },
-    "Height": {
-      "x": 0.0,
-      "y": 5.0
-    },
-    "HasTemperature": false,
-    "Temperature": 0.0,
-    "ItemTags": [
-      8,
-      18,
-      39,
-      43
-    ],
-    "Color": 7
-  },
-  {
-    "Name": "Bowl",
-    "UserWhoCreated": "Brad",
-    "Weight": {
-      "x": 0.0,
-      "y": 11.0
-    },
-    "Height": {
-      "x": 0.0,
-      "y": 4.0
-    },
-    "HasTemperature": false,
-    "Temperature": 0.0,
-    "ItemTags": [
-      42,
-      1,
-      11,
-      18,
-      24
-    ],
-    "Color": 9
   },
   {
     "Name": "Strawberry",
     "UserWhoCreated": "Brad",
     "Weight": {
       "x": 0.0,
-      "y": 2.0
+      "y": 0.3
     },
     "Height": {
       "x": 0.0,
@@ -77,20 +126,42 @@
     "HasTemperature": false,
     "Temperature": 0.0,
     "ItemTags": [
-      27,
+      14,
       17,
+      27,
       28,
-      19,
-      42
+      19
     ],
     "Color": 12
   },
   {
-    "Name": "Paper Towel",
+    "Name": "Post-It Notes",
     "UserWhoCreated": "Brad",
     "Weight": {
       "x": 0.0,
-      "y": 6.0
+      "y": 3.0
+    },
+    "Height": {
+      "x": 0.0,
+      "y": 2.0
+    },
+    "HasTemperature": false,
+    "Temperature": 0.0,
+    "ItemTags": [
+      12,
+      18,
+      42,
+      24,
+      14
+    ],
+    "Color": 14
+  },
+  {
+    "Name": "Paper",
+    "UserWhoCreated": "Brad",
+    "Weight": {
+      "x": 0.0,
+      "y": 0.1
     },
     "Height": {
       "x": 0.0,
@@ -99,32 +170,103 @@
     "HasTemperature": false,
     "Temperature": 0.0,
     "ItemTags": [
-      42,
-      18,
-      11
+      5,
+      8,
+      12,
+      24,
+      42
     ],
     "Color": 15
   },
   {
-    "Name": "Whale",
+    "Name": "Dollar Bill",
     "UserWhoCreated": "Brad",
     "Weight": {
-      "x": 40000.0,
-      "y": 0.0
+      "x": 0.0,
+      "y": 0.04
     },
     "Height": {
-      "x": 50.0,
-      "y": 0.0
+      "x": 0.0,
+      "y": 2.6
     },
     "HasTemperature": false,
     "Temperature": 0.0,
     "ItemTags": [
-      6,
-      13,
-      22,
-      31,
-      32
+      5,
+      8,
+      12,
+      43,
+      24
     ],
-    "Color": 9
+    "Color": 10
+  },
+  {
+    "Name": "Hot Dog",
+    "UserWhoCreated": "Kyle",
+    "Weight": {
+      "x": 0.0,
+      "y": 1.3404116474717367
+    },
+    "Height": {
+      "x": 0.0,
+      "y": 38.09999942779541
+    },
+    "HasTemperature": true,
+    "Temperature": 159.8,
+    "ItemTags": [
+      11,
+      17,
+      21,
+      24,
+      42
+    ],
+    "Color": 12
+  },
+  {
+    "Name": "Highlighter",
+    "UserWhoCreated": "Kyle",
+    "Weight": {
+      "x": 0.0,
+      "y": 0.38801389795234487
+    },
+    "Height": {
+      "x": 0.0,
+      "y": 22.859999656677246
+    },
+    "HasTemperature": false,
+    "Temperature": 0.0,
+    "ItemTags": [
+      1,
+      11,
+      18,
+      24,
+      42,
+      39
+    ],
+    "Color": 14
+  },
+  {
+    "Name": "Bumblebee",
+    "UserWhoCreated": "Brad",
+    "Weight": {
+      "x": 0.0,
+      "y": 0.01
+    },
+    "Height": {
+      "x": 0.0,
+      "y": 0.5
+    },
+    "HasTemperature": false,
+    "Temperature": 0.0,
+    "ItemTags": [
+      2,
+      6,
+      22,
+      30,
+      33,
+      40,
+      34
+    ],
+    "Color": 14
   }
 ]

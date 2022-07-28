@@ -46,6 +46,14 @@ namespace ItemRoulette
 			CurrentUser.AdjustUserName(newName);
 		}
 
+		public User GetUserByString(string name)
+		{
+			User returnUser = CurrentUser;
+			foreach (User user in UserList.Where(user => user.Name == name))			
+				returnUser = user;
+			return returnUser;
+		}
+
 		private void Navigate()
 		{
 			MenuState nextMenuState = MenuState.Start;
@@ -69,8 +77,8 @@ namespace ItemRoulette
 		private MenuState Start()
 		{
 			MenuStateEnterText(
-				$"Welcome to the Item Evaluator Application!\n" +
-				$"Create Items to earn Evaluator Tokens that allow you to use the Item Roulette!");
+				$"Welcome to the Item Roulette Application!\n" +
+				$"Create Items to earn Roulette Credits that allow you to use the Item Roulette!");
 			if (UserList.Count == 0)
 			{
 				Console.WriteLine($"There are no users created. Please create a User to continue.");

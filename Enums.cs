@@ -82,6 +82,16 @@ namespace ItemRoulette
 		Old
 	}	
 
+	public enum SpinCategory
+	{
+		FirstLetter,
+		Weight,
+		Height,
+		Temperature,
+		ItemTag,
+		Color
+	}
+
 	public class Enums
 	{
 	}

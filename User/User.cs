@@ -14,17 +14,17 @@ namespace ItemRoulette
 		public MeasurementSystem MeasurementSystemPref { get; private set; }
 		public ConsoleColor ColorPref { get; private set; }
 		public int ItemsCreated { get; private set; }
-		public int EvaluatorTokens { get; private set; }
+		public int RouletteCredit { get; private set; }
 
 		[JsonConstructor]
-		public User(String name, TemperatureScale temperatureScalePref, MeasurementSystem measurementSystemPref, ConsoleColor colorPref, int itemsCreated, int evaluatorTokens)
+		public User(String name, TemperatureScale temperatureScalePref, MeasurementSystem measurementSystemPref, ConsoleColor colorPref, int itemsCreated, int rouletteCredit)
 		{
 			Name = name;
 			TemperatureScalePref = temperatureScalePref;
 			MeasurementSystemPref = measurementSystemPref;
 			ColorPref = colorPref;
 			ItemsCreated = itemsCreated;
-			EvaluatorTokens = evaluatorTokens;
+			RouletteCredit = rouletteCredit;
 		}
 
 		public void AdjustUserName(string newName)
@@ -59,25 +59,25 @@ namespace ItemRoulette
 			return ItemsCreated;
 		}
 
-		public int GiveEvaluatorToken(int tokenIncrease)
+		public int GiveRouletteCredit(int creditIncrease)
 		{
-			EvaluatorTokens += tokenIncrease;
-			return EvaluatorTokens;
+			RouletteCredit += creditIncrease;
+			return RouletteCredit;
 		}
 
-		public int UseEvaluatorTokens(int tokenDecrease)
+		public int useRouletteCredit(int creditDecrease)
 		{
-			EvaluatorTokens -= tokenDecrease;
-			return EvaluatorTokens;
+			RouletteCredit -= creditDecrease;
+			return RouletteCredit;
 		}
 
-		public string DisplayEvaluatorTokens()
+		public string DisplayRouletteCredits()
 		{
-			switch (EvaluatorTokens)
+			switch (RouletteCredit)
 			{
-				case 0: return $"{EvaluatorTokens} Evaluator Tokens";
-				case 1: return $"{EvaluatorTokens} Evaluator Token";
-				default: return $"{EvaluatorTokens} Evaluator Tokens";
+				case 0: return $"{RouletteCredit} Roulette Credits";
+				case 1: return $"{RouletteCredit} Roulette Credit";
+				default: return $"{RouletteCredit} Roulette Credits";
 			}
 		}
 

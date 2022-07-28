@@ -34,18 +34,22 @@ namespace ItemRoulette
 		{
 			MenuStateEnterText(
 				$"You are now in the Item Creator.\n" +
-				$"Each Item created will give you 1 Evaluator Token.");
+				$"Each Item created will give you 1 Roulette Credit.");
 			bool keepCreatingItems = true;
-			while (keepCreatingItems)			
-				CreateItem(out keepCreatingItems);						
+			bool goToRoulette = false;
+			while (keepCreatingItems && !goToRoulette)			
+				CreateItem(out keepCreatingItems, out goToRoulette);											
 			nav.SaveItemList();
 			nav.SaveUserList();
+			if (goToRoulette)
+				return MenuState.ItemRoulette;
 			return MenuState.MainMenu;
 		}
 
-		private void CreateItem(out bool keepCreatingItems)
+		private void CreateItem(out bool keepCreatingItems, out bool goToRoulette)
 		{
 			keepCreatingItems = false;
+			goToRoulette = false;
 			string newItemName = GetName(out bool returnToMainMenu);
 			if (returnToMainMenu)
 				return;
@@ -67,12 +71,14 @@ namespace ItemRoulette
 			Item newItem = new Item(newItemName, nav.CurrentUser.Name, newItemWeight, newItemHeight, newItemHasTemperature, newItemTemperature, newItemTags, newColor);			
 			nav.ItemList.Add(newItem);
 			nav.CurrentUser.IncreaseItemsCreatedCount();
-			nav.CurrentUser.GiveEvaluatorToken(1);
+			nav.CurrentUser.GiveRouletteCredit(1);
 			WriteColor(
 				$"New Item [={newItem.Color}]{newItem.Name}[/] added to Item Evaluator.\n" +
-				$"You have earned 1 Evaluator Token and now have {nav.CurrentUser.DisplayEvaluatorTokens()}.\n" +
-				$"Type {quote}Item{quote} to create another Item.\n" +
-				returnToMainMenuOption);
+				$"You have earned 1 Roulette Credit and now have {nav.CurrentUser.DisplayRouletteCredits()}.\n" +
+				$"Type {quote}Item{quote} to create another Item.");
+			if (nav.ItemList.Count > 10)
+				Console.WriteLine($"Type {quote}Roulette{quote} to go to the Item Roulette!");
+			Console.WriteLine($"{returnToMainMenuOption}");
 			bool validResponse = false;
 			while (!validResponse)
 			{
@@ -81,6 +87,7 @@ namespace ItemRoulette
 				{
 					case "escape": keepCreatingItems = false; return;
 					case "item": keepCreatingItems = true; return;
+					case "roulette" when nav.ItemList.Count > 10: keepCreatingItems = false; goToRoulette = true; return;
 					default: Console.WriteLine($"{invalidResponse}"); break;
 				}					
 			}
@@ -323,7 +330,7 @@ namespace ItemRoulette
 				}
 			}
 			Console.WriteLine(
-					$"Your current Item Tags are: {DisplayItemTags(itemTagsList)}.\n" +
+					$"Your current Item Tags are: {StateItemTags(itemTagsList)}.\n" +
 					$"Would you like to add more?\n" +
 					$"Type {quote}Done{quote} anytime if you are done adding Item Tags.\n" +
 					returnToMainMenuOption);
@@ -347,7 +354,7 @@ namespace ItemRoulette
 							else
 							{
 								itemTagsList.Add(moreItemTag);
-								Console.WriteLine($"{moreItemTag} added to Item Tags. Your current Item Tags are: {DisplayItemTags(itemTagsList)}.");
+								Console.WriteLine($"{moreItemTag} added to Item Tags. Your current Item Tags are: {StateItemTags(itemTagsList)}.");
 							}
 						}
 						else
