@@ -28,21 +28,24 @@ namespace ItemEvaluator
 			while (!validUserOption)
 			{
 				string userResponse = Console.ReadLine().ToLower();
-				if (userResponse == "escape")				
-					return MenuState.MainMenu;				
-				else if (nameDict.ContainsKey(userResponse))
+				switch (userResponse)
 				{
-					validUserOption = true;
-					nameDict.TryGetValue(userResponse, out User nextSelectedUser);
-					nav.CurrentUser = nextSelectedUser;
-					WriteColor(
-						$"\n" +
-						$"User set to [={nav.CurrentUser.ColorPref}]{nav.CurrentUser.Name}[/].\n" +
-						$"Press any key to return to Main Menu.");
-					Console.ReadKey();
+					case "escape": return MenuState.MainMenu;
+					default:
+						if (nameDict.ContainsKey(userResponse))
+						{
+							validUserOption = true;
+							nameDict.TryGetValue(userResponse, out User nextSelectedUser);
+							nav.CurrentUser = nextSelectedUser;
+							WriteColor(
+								$"\n" +
+								$"User set to [={nav.CurrentUser.ColorPref}]{nav.CurrentUser.Name}[/].\n" +
+								$"Press any key to return to Main Menu.");
+							Console.ReadKey();
+						}
+						else
+							Console.WriteLine($"{invalidResponse}"); break;
 				}
-				else
-					Console.WriteLine($"{invalidResponse}");
 			}
 			return MenuState.MainMenu;
 		}

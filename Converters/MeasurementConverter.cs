@@ -130,21 +130,21 @@ namespace ItemEvaluator
 			return new Vector2(pound, ounce);
 		}
 
-		public static Vector2 ImperialToMetricWeight(double pound, double ounce)
+		private static Vector2 ImperialToMetricWeight(double pound, double ounce)
 		{
 			double kilogram = PoundToKilogram(pound);
 			double gram = OunceToGram(ounce);
 			return new Vector2(kilogram, gram);
 		}
 
-		public static Vector2 MetricToImperialHeight(double meter, double centimeter)
+		private static Vector2 MetricToImperialHeight(double meter, double centimeter)
 		{
 			double feet = MeterToFeet(meter);
 			double inch = CentimeterToInch(centimeter);
 			return new Vector2(feet, inch);
-		}		
+		}
 
-		public static Vector2 ImperialToMetricHeight(double feet, double inch)
+		private static Vector2 ImperialToMetricHeight(double feet, double inch)
 		{
 			double meter = FeetToMeter(feet);
 			double centimeter = InchToCentimeter(inch);

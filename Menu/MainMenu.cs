@@ -37,22 +37,17 @@ namespace ItemEvaluator
 			while (!validMenu)
 			{
 				string menuResponse = Console.ReadLine().ToLower();
-				if (menuResponse == "user" && nav.UserList.Count > 1)
-					return MenuState.UserSelect;
-				else if (menuResponse == "new")
-					return MenuState.UserCreator;
-				else if (menuResponse == "item")
-					return MenuState.ItemCreator;
-				else if (menuResponse == "view" && nav.CurrentUser.ItemsCreated > 0)
-					return MenuState.ItemViewer;
-				else if (menuResponse == "roulette" && nav.CurrentUser.EvaluatorTokens > 0)
-					return MenuState.ItemRoulette;
-				else if (menuResponse == "settings")
-					return MenuState.UserSettings;
-				else if (menuResponse == "exit")
-					return MenuState.Exit;
-				else
-					Console.WriteLine($"{invalidResponse}");
+				switch (menuResponse)
+				{
+					case "user" when nav.UserList.Count > 1: return MenuState.UserSelect;
+					case "new":	return MenuState.UserCreator;
+					case "item": return MenuState.ItemCreator;
+					case "view" when nav.CurrentUser.ItemsCreated > 0: return MenuState.ItemViewer;
+					case "roulette" when nav.CurrentUser.EvaluatorTokens > 0: return MenuState.ItemRoulette;
+					case "settings": return MenuState.UserSettings;
+					case "exit": return MenuState.Exit;
+					default: Console.WriteLine($"{invalidResponse}"); break;
+				}
 			}
 			return MenuState.MainMenu;
 		}

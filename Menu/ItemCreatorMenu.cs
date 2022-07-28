@@ -36,10 +36,8 @@ namespace ItemEvaluator
 				$"You are now in the Item Creator.\n" +
 				$"Each Item created will give you 1 Evaluator Token.");
 			bool keepCreatingItems = true;
-			while (keepCreatingItems)
-			{
-				CreateItem(out keepCreatingItems);
-			}			
+			while (keepCreatingItems)			
+				CreateItem(out keepCreatingItems);						
 			nav.SaveItemList();
 			nav.SaveUserList();
 			return MenuState.MainMenu;
@@ -79,29 +77,19 @@ namespace ItemEvaluator
 			while (!validResponse)
 			{
 				string keepCreatingResponse = Console.ReadLine().ToLower();
-				if (keepCreatingResponse == "escape")
+				switch (keepCreatingResponse)
 				{
-					keepCreatingItems = false;
-					return;
-				}
-				else if (keepCreatingResponse == "item")
-				{
-					keepCreatingItems = true;
-					return;
-				}
-				else
-					Console.WriteLine($"{invalidResponse}");					
+					case "escape": keepCreatingItems = false; return;
+					case "item": keepCreatingItems = true; return;
+					default: Console.WriteLine($"{invalidResponse}"); break;
+				}					
 			}
 		}
 
 		private string GetName(out bool returnToMainMenu)
 		{
 			returnToMainMenu = false;
-			List<string> itemNameList = new List<string>();
-			foreach (var item in nav.ItemList)
-			{
-				itemNameList.Add(item.Name.ToLower());
-			}
+			List<string> itemNameList = (nav.ItemList.Select(item => item.Name.ToLower())).ToList();
 			Console.WriteLine(
 				$"What is the name of your Item?\n" +
 				returnToMainMenuOption);
@@ -111,26 +99,26 @@ namespace ItemEvaluator
 			{
 				itemNameResponse = Console.ReadLine();
 				string itemNameResponseLower = itemNameResponse.ToLower();
-				if (itemNameResponseLower == "escape")
+				switch (itemNameResponseLower)
 				{
-					returnToMainMenu = true;
-					return "";
-				}
-				else if (nav.ItemList.Count == 0)				
-					validItemName = true;				
-				else
-				{
-					foreach (var item in nav.ItemList)
-					{
-						validItemName = true;
-						if (item.Name.ToLower() == itemNameResponseLower)
+					case "escape":
+						returnToMainMenu = true; return "";
+					default:
+						if (nav.ItemList.Count == 0)
+							validItemName = true;
+						else
 						{
-							validItemName = false;
-							Console.WriteLine($"Item Name has already been taken. Please try again.");
-							break;
-						}
-					}
-				}				
+							foreach (var item in nav.ItemList)
+							{
+								validItemName = true;
+								if (item.Name.ToLower() == itemNameResponseLower)
+								{
+									validItemName = false;
+									Console.WriteLine($"Item Name has already been taken. Please try again."); break;
+								}
+							}
+						} break;
+				}
 			}
 			Console.WriteLine($"Item Name set to {itemNameResponse}.\n");
 			return itemNameResponse;
@@ -149,17 +137,16 @@ namespace ItemEvaluator
 			while (!validLargeWeight)
 			{
 				largeWeightResponse = Console.ReadLine().ToLower();
-				if (largeWeightResponse == "escape")
+				switch (largeWeightResponse)
 				{
-					returnToMainMenu = true;
-					return new Vector2(0, 0);
+					case "escape":
+						returnToMainMenu = true; return new Vector2(0, 0);
+					default:
+						if (int.TryParse(largeWeightResponse, out int result))						
+							validLargeWeight = true;						
+						else
+							Console.WriteLine($"{invalidResponse}"); break;
 				}
-				else if (int.TryParse(largeWeightResponse, out int result))
-				{
-					validLargeWeight = true;
-				}
-				else
-					Console.WriteLine($"{invalidResponse}");
 			}
 			double largeWeight = Convert.ToDouble(largeWeightResponse);
 			Console.WriteLine(
@@ -172,20 +159,21 @@ namespace ItemEvaluator
 			while (!validSmallWeight)
 			{
 				smallWeightResponse = Console.ReadLine().ToLower();
-				if (smallWeightResponse == "escape")
+				switch (smallWeightResponse)
 				{
-					returnToMainMenu = true;
-					return new Vector2(0, 0);
+					case "escape":
+						returnToMainMenu = true; return new Vector2(0, 0);
+					default:
+						if (DetermineIfValidSmallValue(smallWeightResponse, out smallWeight) && MeasurementConverter.MaximumSmallWeight(MSP) >= smallWeight)
+						{
+							if (largeWeight == 0 && smallWeight == 0)
+								Console.WriteLine($"Invalid Reponse. Total Item Weight Cannot be 0. Please try again.");
+							else
+								validSmallWeight = true;
+						}
+						else
+							Console.WriteLine($"{invalidResponse}"); break;
 				}
-				else if (DetermineIfValidSmallValue(smallWeightResponse, out smallWeight) && MeasurementConverter.MaximumSmallWeight(MSP) >= smallWeight)
-				{
-					if (largeWeight == 0 && smallWeight == 0)
-						Console.WriteLine($"Invalid Reponse. Total Item Weight Cannot be 0. Please try again.");
-					else
-						validSmallWeight = true;
-				}								
-				else
-					Console.WriteLine($"{invalidResponse}");
 			}
 			Vector2 saveValueWeight = MeasurementConverter.SaveValueWeight(MSP, largeWeight, smallWeight);
 			Console.WriteLine($"Weight set to {MeasurementConverter.DisplayValueWeight(MSP, saveValueWeight)}.\n");
@@ -205,15 +193,16 @@ namespace ItemEvaluator
 			while (!validLargeHeight)
 			{
 				largeHeightResponse = Console.ReadLine().ToLower();
-				if (largeHeightResponse == "escape")
+				switch (largeHeightResponse)
 				{
-					returnToMainMenu = true;
-					return new Vector2(0, 0);
+					case "escape":
+						returnToMainMenu = true; return new Vector2(0, 0);
+					default:
+						if (int.TryParse(largeHeightResponse, out int result))
+							validLargeHeight = true;
+						else
+							Console.WriteLine($"{invalidResponse}"); break;
 				}
-				else if (int.TryParse(largeHeightResponse, out int result))				
-					validLargeHeight = true;				
-				else
-					Console.WriteLine($"{invalidResponse}");
 			}
 			double largeHeight = Convert.ToDouble(largeHeightResponse);
 			Console.WriteLine(
@@ -226,20 +215,21 @@ namespace ItemEvaluator
 			while (!validSmallHeight)
 			{
 				smallHeightResponse = Console.ReadLine().ToLower();
-				if (smallHeightResponse == "escape")
+				switch (smallHeightResponse)
 				{
-					returnToMainMenu = true;
-					return new Vector2(0, 0);
+					case "escape":
+						returnToMainMenu = true; return new Vector2(0, 0);
+					default:
+						if (DetermineIfValidSmallValue(smallHeightResponse, out smallHeight) && MeasurementConverter.MaximumSmallHeight(MSP) >= smallHeight)
+						{
+							if (largeHeight == 0 && smallHeight == 0)
+								Console.WriteLine($"Invalid Response. Total Item height Cannot be 0. Please try again.");
+							else
+								validSmallHeight = true;
+						}
+						else
+							Console.WriteLine($"{invalidResponse}"); break;
 				}
-				else if (DetermineIfValidSmallValue(smallHeightResponse, out smallHeight) && MeasurementConverter.MaximumSmallHeight(MSP) >= smallHeight)
-				{
-					if (largeHeight == 0 && smallHeight == 0)
-						Console.WriteLine($"Invalid Reponse. Total Item height Cannot be 0. Please try again.");
-					else
-						validSmallHeight = true;
-				}
-				else
-					Console.WriteLine($"{invalidResponse}");
 			}
 			Vector2 saveValueHeight = MeasurementConverter.SaveValueHeight(MSP, largeHeight, smallHeight);
 			Console.WriteLine($"Height set to {MeasurementConverter.DisplayValueHeight(MSP, saveValueHeight)}.\n");
@@ -258,23 +248,18 @@ namespace ItemEvaluator
 			while (!hasValidTemperatureResponse)
 			{
 				string hasTemperatureResponse = Console.ReadLine().ToLower();
-				if (hasTemperatureResponse == "escape")
+				switch (hasTemperatureResponse)
 				{
-					returnToMainMenu = true;
-					return 0;
+					case "escape":
+						returnToMainMenu = true; return 0;
+					case "yes":
+						hasValidTemperatureResponse = true;	break;
+					case "no":
+						Console.WriteLine();
+						newItemHasTemperature = false; return 0;
+					default:
+						Console.WriteLine($"{invalidResponse}"); break;
 				}
-				else if (hasTemperatureResponse == "yes")
-				{
-					hasValidTemperatureResponse = true;
-				}
-				else if (hasTemperatureResponse == "no")
-				{
-					Console.WriteLine();
-					newItemHasTemperature = false;
-					return 0;
-				}
-				else
-					Console.WriteLine($"{invalidResponse}");
 			}
 			Console.WriteLine(
 				$"What Temperature is your item in {TemperatureConverter.GetTemperatureName(nav.CurrentUser.TemperatureScalePref)}? It will be rounded to 2 decimal places.\n" +
@@ -285,17 +270,16 @@ namespace ItemEvaluator
 			while (!hasValidTemperature)
 			{
 				temperatureResponse = Console.ReadLine().ToLower();
-				if (temperatureResponse == "escape")
+				switch (temperatureResponse)
 				{
-					returnToMainMenu = true;
-					return 0;
+					case "escape":
+						returnToMainMenu = true; return 0;
+					default:
+						if (DetermineIfValidSmallValue(temperatureResponse, out newTemperature))						
+							hasValidTemperature = true;						
+						else
+							Console.WriteLine($"{invalidResponse}"); break;
 				}
-				else if (DetermineIfValidSmallValue(temperatureResponse, out newTemperature))
-				{
-					hasValidTemperature = true;
-				}
-				else
-					Console.WriteLine($"{invalidResponse}");
 			}
 			double saveValueTemperature = TemperatureConverter.SaveValueTemperature(TSP, newTemperature);
 			Console.WriteLine($"Temperature set to {TemperatureConverter.DisplayValueTemperature(TSP, saveValueTemperature)}.\n");
@@ -322,20 +306,21 @@ namespace ItemEvaluator
 			while (!hasValidFirstItemTagResponse)
 			{
 				firstItemResponse = Console.ReadLine().ToLower();
-				if (firstItemResponse == "escape")
+				switch (firstItemResponse)
 				{
-					returnToMainMenu = true;
-					return new List<ItemTags>();
+					case "escape":
+						returnToMainMenu = true; return new List<ItemTags>();
+					default:
+						if (itemTagStringsDict.ContainsKey(firstItemResponse))
+						{
+							hasValidFirstItemTagResponse = true;
+							itemTagStringsDict.TryGetValue(firstItemResponse, out ItemTags firstItemTag);
+							itemTagsList.Add(firstItemTag);
+							Console.WriteLine($"{firstItemTag} added to Item Tags.\n");
+						}
+						else
+							Console.WriteLine($"{invalidResponse}"); break;
 				}
-				else if (itemTagStringsDict.ContainsKey(firstItemResponse))
-				{
-					hasValidFirstItemTagResponse = true;
-					itemTagStringsDict.TryGetValue(firstItemResponse, out ItemTags firstItemTag);
-					itemTagsList.Add(firstItemTag);
-					Console.WriteLine($"{firstItemTag} added to Item Tags.\n");
-				}
-				else
-					Console.WriteLine($"{invalidResponse}");
 			}
 			Console.WriteLine(
 					$"Your current Item Tags are: {DisplayItemTags(itemTagsList)}.\n" +
@@ -347,26 +332,27 @@ namespace ItemEvaluator
 			while (!hasValidMoreItemTagsResponse)
 			{				
 				moreItemTagsResponse = Console.ReadLine().ToLower();
-				if (moreItemTagsResponse == "escape")
+				switch (moreItemTagsResponse)
 				{
-					returnToMainMenu = true;
-					return new List<ItemTags>();
+					case "escape":
+						returnToMainMenu = true; return new List<ItemTags>();
+					case "done":
+						hasValidMoreItemTagsResponse = true; break;
+					default:
+						if (itemTagStringsDict.ContainsKey(moreItemTagsResponse))
+						{
+							itemTagStringsDict.TryGetValue(moreItemTagsResponse, out ItemTags moreItemTag);
+							if (itemTagsList.Contains(moreItemTag))
+								Console.WriteLine($"{moreItemTag} already added to Item Tags. Please try again.");
+							else
+							{
+								itemTagsList.Add(moreItemTag);
+								Console.WriteLine($"{moreItemTag} added to Item Tags. Your current Item Tags are: {DisplayItemTags(itemTagsList)}.");
+							}
+						}
+						else
+							Console.WriteLine($"{invalidResponse}"); break;
 				}
-				else if (moreItemTagsResponse == "done")				
-					hasValidMoreItemTagsResponse = true;				
-				else if (itemTagStringsDict.ContainsKey(moreItemTagsResponse))
-				{
-					itemTagStringsDict.TryGetValue(moreItemTagsResponse, out ItemTags moreItemTag);
-					if (itemTagsList.Contains(moreItemTag))					
-						Console.WriteLine($"{moreItemTag} already added to Item Tags. Please try again.");					
-					else
-					{
-						itemTagsList.Add(moreItemTag);
-						Console.WriteLine($"{moreItemTag} added to Item Tags. Your current Item Tags are: {DisplayItemTags(itemTagsList)}.");
-					}					
-				}
-				else
-					Console.WriteLine($"{invalidResponse}");
 			}
 			Console.WriteLine();
 			return itemTagsList;
@@ -393,19 +379,20 @@ namespace ItemEvaluator
 			while (!hasValidColorResponse)
 			{
 				string colorResponse = Console.ReadLine().ToLower();
-				if (colorResponse == "escape")
+				switch (colorResponse)
 				{
-					returnToMainMenu = true;
-					return color;
+					case "escape":
+						returnToMainMenu = true; return color;
+					default:
+						if (colorStringsDict.ContainsKey(colorResponse))
+						{
+							hasValidColorResponse = true;
+							colorStringsDict.TryGetValue(colorResponse, out color);
+							WriteColor($"Item Color set to [={color}]{color}[/].");
+						}
+						else
+							Console.WriteLine($"{invalidResponse}"); break;
 				}
-				else if (colorStringsDict.ContainsKey(colorResponse))
-				{
-					hasValidColorResponse = true;
-					colorStringsDict.TryGetValue(colorResponse, out color);
-					WriteColor($"Item Color set to [={color}]{color}[/].");
-				}
-				else
-					Console.WriteLine($"{invalidResponse}");
 			}			
 			return color;
 		}		
@@ -416,9 +403,8 @@ namespace ItemEvaluator
 			{
 				newValue = Math.Round(newValue, 2, MidpointRounding.AwayFromZero);		
 				return true;
-			}
-			else
-				return false;			
+			}			
+			return false;			
 		}
 	}
 }

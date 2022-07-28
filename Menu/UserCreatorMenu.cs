@@ -92,31 +92,26 @@ namespace ItemEvaluator
 			while (!validTemperatureResponse)
 			{
 				string temperatureResponse = Console.ReadLine().ToLower();
-				if (temperatureResponse == "escape" && canGoToMainMenu)
+				switch (temperatureResponse)
 				{
-					returnToMainMenu = true;
-					return TemperatureScale.Fahrenheit;
+					case "escape" when canGoToMainMenu:
+						returnToMainMenu = true;
+						return TemperatureScale.Fahrenheit;
+					case "fahrenheit":
+						Console.WriteLine($"Temperature Scale Preference set to Fahrenheit.");
+						temperatureScale = TemperatureScale.Fahrenheit;
+						validTemperatureResponse = true; break;
+					case "celsius":
+						Console.WriteLine($"Temperature Scale Preference set to Celsius.");
+						temperatureScale = TemperatureScale.Celsius;
+						validTemperatureResponse = true; break;
+					case "kelvin":
+						Console.WriteLine($"Temperature Scale Preference set to Kelvin.");
+						temperatureScale = TemperatureScale.Kelvin;
+						validTemperatureResponse = true; break;
+					default:
+						Console.WriteLine($"{invalidResponse}"); break;
 				}
-				else if (temperatureResponse == "fahrenheit")
-				{
-					Console.WriteLine($"Temperature Scale Preference set to Fahrenheit.");
-					temperatureScale = TemperatureScale.Fahrenheit;
-					validTemperatureResponse = true;
-				}
-				else if (temperatureResponse == "celsius")
-				{
-					Console.WriteLine($"Temperature Scale Preference set to Celsius.");
-					temperatureScale = TemperatureScale.Celsius;
-					validTemperatureResponse = true;
-				}
-				else if (temperatureResponse == "kelvin")
-				{
-					Console.WriteLine($"Temperature Scale Preference set to Kelvin.");
-					temperatureScale = TemperatureScale.Kelvin;
-					validTemperatureResponse = true;
-				}
-				else
-					Console.WriteLine($"{invalidResponse}");
 			}
 			return temperatureScale;
 		}
@@ -134,25 +129,22 @@ namespace ItemEvaluator
 			while (!validMeasurementResponse)
 			{
 				string measurementResponse = Console.ReadLine().ToLower();
-				if (measurementResponse == "escape" && canGoToMainMenu)
+				switch (measurementResponse)
 				{
-					returnToMainMenu = true;
-					return MeasurementSystem.Imperial;
+					case "escape" when canGoToMainMenu:
+						returnToMainMenu = true;
+						return MeasurementSystem.Imperial;
+					case "imperial":
+						Console.WriteLine($"Measurement System Preference set to Imperial.");
+						measurementSystem = MeasurementSystem.Imperial;
+						validMeasurementResponse = true; break;
+					case "metric":
+						Console.WriteLine($"Measurement System Preference set to Metric.");
+						measurementSystem = MeasurementSystem.Metric;
+						validMeasurementResponse = true; break;
+					default:
+						Console.WriteLine($"{invalidResponse}"); break;
 				}
-				else if (measurementResponse == "imperial")
-				{
-					Console.WriteLine($"Measurement System Preference set to Imperial.");
-					measurementSystem = MeasurementSystem.Imperial;
-					validMeasurementResponse = true;
-				}
-				else if (measurementResponse == "metric")
-				{
-					Console.WriteLine($"Measurement System Preference set to Metric.");
-					measurementSystem = MeasurementSystem.Metric;
-					validMeasurementResponse = true;
-				}
-				else
-					Console.WriteLine($"{invalidResponse}");
 			}
 			return measurementSystem;
 		}
@@ -179,61 +171,43 @@ namespace ItemEvaluator
 			while (!validColorResponse)
 			{
 				string colorResponse = Console.ReadLine().ToLower();
-				if (colorResponse == "escape" && canGoToMainMenu)
+				switch (colorResponse)
 				{
-					returnToMainMenu = true;
-					return ConsoleColor.White;
+					case "escape" when canGoToMainMenu:	returnToMainMenu = true; return ConsoleColor.White;
+					case "red":
+						WriteColor($"Text Color Preference set to [={ConsoleColor.Red}]Red[/].");
+						textColor = ConsoleColor.Red;
+						validColorResponse = true; break;
+					case "yellow":
+						WriteColor($"Text Color Preference set to [={ConsoleColor.Yellow}]Yellow[/].");
+						textColor = ConsoleColor.Yellow;
+						validColorResponse = true; break;
+					case "green":
+						WriteColor($"Text Color Preference set to [={ConsoleColor.Green}]Green[/].");
+						textColor = ConsoleColor.Green;
+						validColorResponse = true; break;
+					case "blue":
+						WriteColor($"Text Color Preference set to [={ConsoleColor.Blue}]Blue[/].");
+						textColor = ConsoleColor.Blue;
+						validColorResponse = true; break;
+					case "cyan":
+						WriteColor($"Text Color Preference set to [={ConsoleColor.Cyan}]Cyan[/].");
+						textColor = ConsoleColor.Cyan;
+						validColorResponse = true; break;
+					case "magenta":
+						WriteColor($"Text Color Preference set to [={ConsoleColor.Magenta}]Magenta[/].");
+						textColor = ConsoleColor.Magenta;
+						validColorResponse = true; break;
+					case "gray":
+						WriteColor($"Text Color Preference set to [={ConsoleColor.Gray}]Gray[/].");
+						textColor = ConsoleColor.Gray;
+						validColorResponse = true; break;
+					case "white":
+						WriteColor($"Text Color Preference set to [={ConsoleColor.White}]White[/].");
+						textColor = ConsoleColor.White;
+						validColorResponse = true; break;
+					default: Console.WriteLine($"{invalidResponse}"); break;
 				}
-				else if (colorResponse == "red")
-				{
-					WriteColor($"Text Color Preference set to [={ConsoleColor.Red}]Red[/].");
-					textColor = ConsoleColor.Red;
-					validColorResponse = true;
-				}
-				else if (colorResponse == "yellow")
-				{
-					WriteColor($"Text Color Preference set to [={ConsoleColor.Yellow}]Yellow[/].");
-					textColor = ConsoleColor.Yellow;
-					validColorResponse = true;
-				}
-				else if (colorResponse == "green")
-				{
-					WriteColor($"Text Color Preference set to [={ConsoleColor.Green}]Green[/].");
-					textColor = ConsoleColor.Green;
-					validColorResponse = true;
-				}
-				else if (colorResponse == "blue")
-				{
-					WriteColor($"Text Color Preference set to [={ConsoleColor.Blue}]Blue[/].");
-					textColor = ConsoleColor.Blue;
-					validColorResponse = true;
-				}
-				else if (colorResponse == "cyan")
-				{
-					WriteColor($"Text Color Preference set to [={ConsoleColor.Cyan}]Cyan[/].");
-					textColor = ConsoleColor.Cyan;
-					validColorResponse = true;
-				}
-				else if (colorResponse == "magenta")
-				{
-					WriteColor($"Text Color Preference set to [={ConsoleColor.Magenta}]Magenta[/].");
-					textColor = ConsoleColor.Magenta;
-					validColorResponse = true;
-				}
-				else if (colorResponse == "gray")
-				{
-					WriteColor($"Text Color Preference set to [={ConsoleColor.Gray}]Gray[/].");
-					textColor = ConsoleColor.Gray;
-					validColorResponse = true;
-				}
-				else if (colorResponse == "white")
-				{
-					WriteColor($"Text Color Preference set to [={ConsoleColor.White}]White[/].");
-					textColor = ConsoleColor.White;
-					validColorResponse = true;
-				}
-				else
-					Console.WriteLine($"{invalidResponse}");
 			}
 			return textColor;
 		}

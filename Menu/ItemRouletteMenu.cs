@@ -29,25 +29,29 @@ namespace ItemEvaluator
 					$"Type {quote}Spin{quote} to Play!\n" +
 					$"{returnToMainMenuOption}");
 				string response = Console.ReadLine().ToLower();
-				if (response == "escape")
-					return MenuState.MainMenu;
-				else if (response == "spin")
+				switch (response)
 				{
-					Spin();
-					Console.WriteLine(
-						$"\n" +
-						$"\n" +
-						$"You now have {nav.CurrentUser.DisplayEvaluatorTokens()} remaining.");						
-				}					
-				else
-					Console.WriteLine($"{invalidResponse}");
+					case "escape": return MenuState.MainMenu;
+					case "spin":
+						{
+							Spin(out bool returnToMainMenu);
+							if (returnToMainMenu)
+								return MenuState.MainMenu;
+							Console.WriteLine(
+								$"\n" +
+								$"\n" +
+								$"You now have {nav.CurrentUser.DisplayEvaluatorTokens()} remaining.");
+						} break;
+					default: Console.WriteLine($"{invalidResponse}"); break;
+				}
 			}
 			Console.WriteLine($"You have no more Evaluator Tokens. Press any key to return to Main Menu.");
 			return MenuState.MainMenu;
 		}
 
-		private void Spin()
+		private void Spin(out bool returnToMainMenu)
 		{
+			returnToMainMenu = false;
 			Console.WriteLine(
 				$"\n" +
 				$"Choose a category:\n" +
@@ -63,45 +67,18 @@ namespace ItemEvaluator
 			while (!hasValidResponse)
 			{
 				string response = Console.ReadLine().ToLower();
-				if (response == "escape")
-					return;
-				else if (response == "random")
+				switch (response)
 				{
-					RandomSpin();
-					return;
-				}					
-				else if (response == "name")
-				{
-					NameSpin();
-					return;
-				}												
-				else if (response == "weight")
-				{
-					WeightSpin();
-					return;
-				}										
-				else if (response == "height")
-				{
-					HeightSpin();
-					return;
-				}										
-				else if (response == "temperature")
-				{
-					TemperatureSpin();
-					return;
-				}										
-				else if (response == "tag")
-				{
-					TagSpin();
-					return;
-				}											
-				else if (response == "color")
-				{
-					ColorSpin();
-					return;
-				}											
-				else
-					Console.WriteLine($"{invalidResponse}");
+					case "escape": returnToMainMenu = true; return;
+					case "random": RandomSpin(); return;
+					case "name": NameSpin(); return;
+					case "weight": WeightSpin(); return;
+					case "height": HeightSpin(); return;
+					case "temperature": TemperatureSpin(); return;
+					case "tag": TagSpin(); return;
+					case "color": ColorSpin(); return;
+					default: Console.WriteLine($"{invalidResponse}"); break;
+				}				
 			}			
 		}
 
@@ -199,11 +176,9 @@ namespace ItemEvaluator
 			int letterIndex = random.Next(availableLetters.Count);
 			chosenLetter = availableLetters[letterIndex];
 			List<Item> possibleItems = new List<Item>();
-			foreach (var item in nav.ItemList)
-			{
+			foreach (var item in nav.ItemList)			
 				if (item.Name.Substring(0, 1) == chosenLetter)
-					possibleItems.Add(item);
-			}
+					possibleItems.Add(item);			
 			int index1 = random.Next(possibleItems.Count);
 			int index2 = index1;
 			while (index2 == index1)
@@ -215,10 +190,7 @@ namespace ItemEvaluator
 
 		private (Item item1, Item item2) GetTwoItemsWithTemperature()
 		{
-			List<Item> itemsWithTemperature = new List<Item>();
-			foreach (var item in nav.ItemList)			
-				if (item.HasTemperature)
-					itemsWithTemperature.Add(item);
+			List<Item> itemsWithTemperature = nav.ItemList.Where(item => item.HasTemperature).ToList();
 			Random random = new Random();
 			int index1 = random.Next(itemsWithTemperature.Count);
 			int index2 = index1;
@@ -233,20 +205,16 @@ namespace ItemEvaluator
 		{
 			List<ItemTags> allTags = new List<ItemTags>();
 			List<ItemTags> availableTags = new List<ItemTags>();
-			foreach (var item in nav.ItemList)			
-				foreach (var tag in item.ItemTags)
-				{
-					if (allTags.Contains(tag) && !availableTags.Contains(tag))
-						availableTags.Add(tag);
-					allTags.Add(tag);
-				}			
+			foreach (var tag in nav.ItemList.SelectMany(item => item.ItemTags))
+			{
+				if (allTags.Contains(tag) && !availableTags.Contains(tag))
+					availableTags.Add(tag);
+				allTags.Add(tag);
+			}
 			Random random = new Random();
 			int tagIndex = random.Next(availableTags.Count);
 			ItemTags chosenTag = availableTags[tagIndex];
-			List<Item> possibleItems = new List<Item>();
-			foreach (var item in nav.ItemList)			
-				if (item.ItemTags.Contains(chosenTag))
-					possibleItems.Add(item);			
+			List<Item> possibleItems = (nav.ItemList.Where(item => item.ItemTags.Contains(chosenTag))).ToList();
 			int index1 = random.Next(possibleItems.Count);
 			int index2 = index1;
 			while (index2 == index1)
@@ -270,18 +238,14 @@ namespace ItemEvaluator
 			Random random = new Random();
 			int colorIndex = random.Next(availableColors.Count);
 			ConsoleColor chosenColor = availableColors[colorIndex];
-			List<Item> possibleItems = new List<Item>();
-			foreach (var item in nav.ItemList)			
-				if (item.Color == chosenColor)
-					possibleItems.Add(item);
+			List<Item> possibleItems = (nav.ItemList.Where(item => item.Color == chosenColor)).ToList();
 			int index1 = random.Next(possibleItems.Count);
 			int index2 = index1;
 			while (index2 == index1)
 				index2 = random.Next(possibleItems.Count);
 			Item item1 = possibleItems[index1];
 			Item item2 = possibleItems[index2];
-			return (item1, item2);
-			
+			return (item1, item2);			
 		}
 	}
 }

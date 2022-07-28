@@ -22,19 +22,19 @@ namespace ItemEvaluator
 		public Item(string name, string userWhoCreated, Vector2 weight, Vector2 height, bool hasTemperature,
 			double temperature, List<ItemTags> itemTags, ConsoleColor color)
 		{
-			this.Name = name;
-			this.UserWhoCreated = userWhoCreated;
-			this.Weight = weight;
-			this.Height = height;
-			this.HasTemperature = hasTemperature;
-			this.Temperature = temperature;
-			this.ItemTags = itemTags;
-			this.Color = color;
+			Name = name;
+			UserWhoCreated = userWhoCreated;
+			Weight = weight;
+			Height = height;
+			HasTemperature = hasTemperature;
+			Temperature = temperature;
+			ItemTags = itemTags;
+			Color = color;
 		}	
 		
 		public void AdjustUserWhoCreated(string newUserName)
 		{
-			this.UserWhoCreated = newUserName;
+			UserWhoCreated = newUserName;
 		}
 	}
 }

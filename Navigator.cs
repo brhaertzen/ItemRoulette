@@ -41,9 +41,8 @@ namespace ItemEvaluator
 
 		public void AdjustUserName(string newName)
 		{
-			foreach (var item in ItemList)			
-				if (item.UserWhoCreated == CurrentUser.Name)				
-					item.AdjustUserWhoCreated(newName);	
+			foreach (var item in ItemList.Where(item => item.UserWhoCreated == CurrentUser.Name))			
+				item.AdjustUserWhoCreated(newName);
 			CurrentUser.AdjustUserName(newName);
 		}
 
@@ -89,21 +88,21 @@ namespace ItemEvaluator
 			while (!validUserOption)
 			{
 				string userResponse = Console.ReadLine().ToLower();
-				if (userResponse == "new")
+				switch (userResponse)
 				{
-					validUserOption = true;
-					return MenuState.UserCreator;
+					case "new":	validUserOption = true;	return MenuState.UserCreator;
+					default:
+						if (nameDict.ContainsKey(userResponse))
+						{
+							validUserOption = true;
+							nameDict.TryGetValue(userResponse, out User nextSelectedUser);
+							CurrentUser = nextSelectedUser;
+							WriteColor($"User set to [={CurrentUser.ColorPref}]{CurrentUser.Name}[/].");
+							return MenuState.MainMenu;
+						}
+						else
+							Console.WriteLine($"{invalidResponse}"); break;
 				}
-				else if (nameDict.ContainsKey(userResponse))
-				{
-					validUserOption = true;
-					nameDict.TryGetValue(userResponse, out User nextSelectedUser);
-					CurrentUser = nextSelectedUser;
-					WriteColor($"User set to [={CurrentUser.ColorPref}]{CurrentUser.Name}[/].");
-					return MenuState.MainMenu;
-				}
-				else
-					Console.WriteLine($"{invalidResponse}");
 			}
 			return MenuState.MainMenu;
 		}

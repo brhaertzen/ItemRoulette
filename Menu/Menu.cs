@@ -40,15 +40,12 @@ namespace ItemEvaluator
 		protected void WriteColor(string message)
 		{
 			string[] msgArray = message.Split('[', ']');
-			ConsoleColor color;
 			foreach (var msg in msgArray)
 			{
 				if (msg.StartsWith("/"))
 					Console.ResetColor();
-				else if (msg.StartsWith("=") && Enum.TryParse(msg.Substring(1), out color))
-				{
+				else if (msg.StartsWith("=") && Enum.TryParse(msg.Substring(1), out ConsoleColor color))
 					Console.ForegroundColor = color;
-				}					
 				else
 					Console.Write(msg);
 			}
@@ -58,21 +55,21 @@ namespace ItemEvaluator
 		protected string DisplayItemTags(List<ItemTags> itemTagsList)
 		{
 			string displayTags = "";
-			if (itemTagsList.Count == 1)
-				displayTags = $"{itemTagsList[0]}";
-			else if (itemTagsList.Count == 2)
+			switch (itemTagsList.Count)
 			{
-				displayTags = $"{itemTagsList[0]}";
-				displayTags += $" & {itemTagsList[1]}";
-			}
-			else if (itemTagsList.Count > 2)
-			{
-				displayTags = $"{itemTagsList[0]}";
-				for (int i = 1; i < itemTagsList.Count - 1; i++)
-				{
-					displayTags += $", {itemTagsList[i]}";
-				}
-				displayTags += $", & {itemTagsList[itemTagsList.Count - 1]}";
+				case 1:	displayTags = $"{itemTagsList[0]}";	break;
+				case 2:
+					displayTags = $"{itemTagsList[0]}";
+					displayTags += $" & {itemTagsList[1]}";	break;
+				case > 2:
+					{
+						displayTags = $"{itemTagsList[0]}";
+						for (int i = 1; i < itemTagsList.Count - 1; i++)
+						{
+							displayTags += $", {itemTagsList[i]}";
+						}
+						displayTags += $", & {itemTagsList[^1]}"; break;
+					}
 			}
 			return displayTags;
 		}		

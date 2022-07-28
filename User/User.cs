@@ -19,17 +19,17 @@ namespace ItemEvaluator
 		[JsonConstructor]
 		public User(String name, TemperatureScale temperatureScalePref, MeasurementSystem measurementSystemPref, ConsoleColor colorPref, int itemsCreated, int evaluatorTokens)
 		{
-			this.Name = name;
-			this.TemperatureScalePref = temperatureScalePref;
-			this.MeasurementSystemPref = measurementSystemPref;
-			this.ColorPref = colorPref;
-			this.ItemsCreated = itemsCreated;
-			this.EvaluatorTokens = evaluatorTokens;
+			Name = name;
+			TemperatureScalePref = temperatureScalePref;
+			MeasurementSystemPref = measurementSystemPref;
+			ColorPref = colorPref;
+			ItemsCreated = itemsCreated;
+			EvaluatorTokens = evaluatorTokens;
 		}
 
 		public void AdjustUserName(string newName)
 		{
-			this.Name = newName;
+			Name = newName;
 		}
 
 		public void AdjustTemperatureScalePref(TemperatureScale newTemperatureScale)
@@ -73,22 +73,22 @@ namespace ItemEvaluator
 
 		public string DisplayEvaluatorTokens()
 		{
-			if (EvaluatorTokens == 0)
-				return $"{EvaluatorTokens} Evaluator Tokens";
-			else if (EvaluatorTokens == 1)
-				return $"{EvaluatorTokens} Evaluator Token";
-			else
-				return $"{EvaluatorTokens} Evaluator Tokens";
+			switch (EvaluatorTokens)
+			{
+				case 0: return $"{EvaluatorTokens} Evaluator Tokens";
+				case 1: return $"{EvaluatorTokens} Evaluator Token";
+				default: return $"{EvaluatorTokens} Evaluator Tokens";
+			}
 		}
 
 		public string DisplayItemsCreated()
 		{
-			if (ItemsCreated == 0)
-				return $"{ItemsCreated} Items created";
-			else if (ItemsCreated == 1)
-				return $"{ItemsCreated} Item created";
-			else
-				return $"{ItemsCreated} Items created";
+			switch (ItemsCreated)
+			{
+				case 0: return $"{ItemsCreated} Items created";
+				case 1: return $"{ItemsCreated} Item created";
+				default: return $"{ItemsCreated} Items created";
+			}
 		}
 	}
 }
