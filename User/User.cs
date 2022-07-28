@@ -71,7 +71,7 @@ namespace ItemEvaluator
 			return EvaluatorTokens;
 		}
 
-		public string StateEvaluatorTokens()
+		public string DisplayEvaluatorTokens()
 		{
 			if (EvaluatorTokens == 0)
 				return $"{EvaluatorTokens} Evaluator Tokens";
@@ -81,7 +81,7 @@ namespace ItemEvaluator
 				return $"{EvaluatorTokens} Evaluator Tokens";
 		}
 
-		public string StateItemsCreated()
+		public string DisplayItemsCreated()
 		{
 			if (ItemsCreated == 0)
 				return $"{ItemsCreated} Items created";

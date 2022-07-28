@@ -72,7 +72,7 @@ namespace ItemEvaluator
 			nav.CurrentUser.GiveEvaluatorToken(1);
 			WriteColor(
 				$"New Item [={newItem.Color}]{newItem.Name}[/] added to Item Evaluator.\n" +
-				$"You have earned 1 Evaluator Token and now have {nav.CurrentUser.StateEvaluatorTokens()}.\n" +
+				$"You have earned 1 Evaluator Token and now have {nav.CurrentUser.DisplayEvaluatorTokens()}.\n" +
 				$"Type {quote}Item{quote} to create another Item.\n" +
 				returnToMainMenuOption);
 			bool validResponse = false;

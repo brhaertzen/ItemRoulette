@@ -16,7 +16,7 @@ namespace ItemEvaluator
 		{
 			MenuStateEnterText($"You are now in your Item Viewer.");
 			Console.WriteLine(
-				$"You have {nav.CurrentUser.StateItemsCreated()}. Type {quote}List{quote} to see all your items.\n" +
+				$"You have {nav.CurrentUser.DisplayItemsCreated()}. Type {quote}List{quote} to see all your items.\n" +
 				returnToMainMenuOption);
 			bool keepLookingAtItems = true;
 			while (keepLookingAtItems)

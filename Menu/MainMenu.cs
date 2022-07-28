@@ -25,11 +25,11 @@ namespace ItemEvaluator
 				$"Type {quote}New{quote} to create a New User.\n" +
 				$"Type {quote}Item{quote} to go into the Item Creator and earn Evaluator Tokens.");
 			if (nav.CurrentUser.ItemsCreated > 0)
-				Console.WriteLine($"Type {quote}View{quote} to view all of your created Items. You have {nav.CurrentUser.StateItemsCreated()}.");
+				Console.WriteLine($"Type {quote}View{quote} to view all of your created Items. You have {nav.CurrentUser.DisplayItemsCreated()}.");
 			if (nav.CurrentUser.EvaluatorTokens > 0)		
-				Console.WriteLine($"Type {quote}Roulette{quote} to go into the Item Roulette. You have {nav.CurrentUser.StateEvaluatorTokens()} to use.");			
+				Console.WriteLine($"Type {quote}Roulette{quote} to go into the Item Roulette. You have {nav.CurrentUser.DisplayEvaluatorTokens()} to use.");			
 			else			
-				Console.WriteLine($"You have {nav.CurrentUser.StateEvaluatorTokens()}. Earn more so you can use the Item Roulette.");			
+				Console.WriteLine($"You have {nav.CurrentUser.DisplayEvaluatorTokens()}. Earn more so you can use the Item Roulette.");			
 			Console.WriteLine(
 				$"Type {quote}Settings{quote} to go into your User Settings.\n" +
 				$"Type {quote}Exit{quote} to Exit the Application.");				

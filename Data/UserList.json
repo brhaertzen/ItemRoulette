@@ -1,3 +1,10 @@
 [
-  
+  {
+    "Name": "Brad",
+    "TemperatureScalePref": 0,
+    "MeasurementSystemPref": 1,
+    "ColorPref": 12,
+    "ItemsCreated": 6,
+    "EvaluatorTokens": 6
+  }
 ]
