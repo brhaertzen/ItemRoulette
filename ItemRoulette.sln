@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.32510.428
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ItemEvaluator", "ItemEvaluator.csproj", "{C0755450-E863-4A71-AEF1-350CD9F8336C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ItemRoulette", "ItemRoulette.csproj", "{C0755450-E863-4A71-AEF1-350CD9F8336C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

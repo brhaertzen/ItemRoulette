@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ItemEvaluator
+namespace ItemRoulette
 {
 	public class UserCreatorMenu : Menu
 	{
@@ -12,7 +12,7 @@ namespace ItemEvaluator
 
 		public UserCreatorMenu(Navigator navigator) : base(navigator)
 		{
-			this.canGoToMainMenu = nav.UserList.Count > 0;
+			this.canGoToMainMenu = nav.CurrentUser != null;
 		}
 
 		public override MenuState Enter()
