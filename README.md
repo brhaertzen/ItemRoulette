@@ -4,7 +4,7 @@ Console Application where you can add items to a datafile and spin the roulette 
 Create your own User with User settings that change how the information is displayed to you. Once you have created Items in the Item Creator you will earn Roulette Credits. Use Roulette Credits in the Item Roulette to spin the roulette and have items shown to you with some comparison made. 
 
 **Feature List:**
-- Implement a "Master Loop" (Navigator)
+- Implement a "Master Loop" (Navigator.Navigate())
 - Create an class that inherits from a parent (All the Menus derive from Menu)
 - Create a dictionary or list (Create lists of Items and Users)
 - Read data from external file (Reads and Writes UserList/ItemList to JSON in Data folder)
