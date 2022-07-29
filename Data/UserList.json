@@ -4,15 +4,23 @@
     "TemperatureScalePref": 0,
     "MeasurementSystemPref": 1,
     "ColorPref": 13,
-    "ItemsCreated": 10,
-    "RouletteCredit": 88
+    "ItemsCreated": 20,
+    "RouletteCredit": 95
   },
   {
     "Name": "Kyle",
     "TemperatureScalePref": 1,
-    "MeasurementSystemPref": 0,
+    "MeasurementSystemPref": 1,
     "ColorPref": 11,
-    "ItemsCreated": 2,
-    "RouletteCredit": 1
+    "ItemsCreated": 4,
+    "RouletteCredit": 3
+  },
+  {
+    "Name": "Jessica",
+    "TemperatureScalePref": 0,
+    "MeasurementSystemPref": 1,
+    "ColorPref": 10,
+    "ItemsCreated": 4,
+    "RouletteCredit": 2
   }
 ]

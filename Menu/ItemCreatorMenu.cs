@@ -73,6 +73,7 @@ namespace ItemRoulette
 			nav.CurrentUser.IncreaseItemsCreatedCount();
 			nav.CurrentUser.GiveRouletteCredit(1);
 			WriteColor(
+				$"\n" +
 				$"New Item [={newItem.Color}]{newItem.Name}[/] added to Item Evaluator.\n" +
 				$"You have earned 1 Roulette Credit and now have {nav.CurrentUser.DisplayRouletteCredits()}.\n" +
 				$"Type {quote}Item{quote} to create another Item.");
@@ -86,7 +87,7 @@ namespace ItemRoulette
 				switch (keepCreatingResponse)
 				{
 					case "escape": keepCreatingItems = false; return;
-					case "item": keepCreatingItems = true; return;
+					case "item": Console.WriteLine(); keepCreatingItems = true; return;
 					case "roulette" when nav.ItemList.Count > 10: keepCreatingItems = false; goToRoulette = true; return;
 					default: Console.WriteLine($"{invalidResponse}"); break;
 				}					
